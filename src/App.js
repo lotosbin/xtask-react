@@ -16,13 +16,11 @@ class App extends Component {
         <ApolloProvider client={client}>
             <Router>
                 <div className="App">
-
                     <ul style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}}>
                         <li><Link to="/">Home</Link></li>
                         <li><Link to="/projects">Projects</Link></li>
                         <li><Link to="/about">About</Link></li>
                     </ul>
-
                     <hr/>
                     <Route exact path="/" component={Home}/>
                     <PrivateRoute path="/projects" component={Projects}/>
