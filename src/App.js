@@ -4,6 +4,9 @@ import {BrowserRouter as Router, Link, Route} from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Projects from "./pages/Projects";
+import PrivateRoute from "./router/PrivateRoute";
+import Login from "./pages/Login";
+import Logout from "./pages/Logout";
 
 class App extends Component {
   render() {
@@ -19,8 +22,10 @@ class App extends Component {
 
                 <hr/>
                 <Route exact path="/" component={Home}/>
-                <Route path="/projects" component={Projects}/>
+                <PrivateRoute path="/projects" component={Projects}/>
                 <Route path="/about" component={About}/>
+                <Route path="/login" component={Login}/>
+                <Route path="/logout" component={Logout}/>
             </div>
         </Router>
     );
