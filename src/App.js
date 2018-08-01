@@ -10,6 +10,7 @@ import {ApolloProvider} from "react-apollo";
 import client from "./apollo/client";
 import Projects from "./pages/Projects";
 import Project from "./pages/Project";
+import ProjectGantt from "./pages/ProjectGantt";
 
 class App extends Component {
   render() {
@@ -26,6 +27,7 @@ class App extends Component {
                     <Route exact path="/" component={Home}/>
                     <PrivateRoute path="/projects" component={Projects}/>
                     <PrivateRoute path="/project/:projectId" component={Project}/>
+                    <PrivateRoute path="/project/:projectId/gantt" component={ProjectGantt}/>
                     <Route path="/about" component={About}/>
                     <Route path="/login" component={Login}/>
                     <Route path="/logout" component={Logout}/>

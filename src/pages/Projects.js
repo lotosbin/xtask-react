@@ -67,6 +67,7 @@ const Projects = (props) => {
                             </CardContent>
                             <CardActions>
                                 <Button size="small" component={Link} to={`/project/${id}`}>Detail</Button>
+                                <Button size="small" component={Link} to={`/project/${id}/gantt`}>Gantt</Button>
                             </CardActions>
                         </Card>
                     ))}
