@@ -19,6 +19,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import auth from "./auth";
 import Gantt from "./pages/Gantt";
+import Issues from "./pages/Issues";
 
 const styles = {
     root: {
@@ -45,6 +46,7 @@ class App extends Component {
                             <ul style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around', flex: 1}}>
                                 <li><Link to="/">Home</Link></li>
                                 <li><Link to="/projects">Projects</Link></li>
+                                <li><Link to="/issues">Issues</Link></li>
                                 <li><Link to="/gantt">Gantt</Link></li>
                                 <li><Link to="/about">About</Link></li>
                             </ul>
@@ -53,6 +55,7 @@ class App extends Component {
                     </AppBar>
                     <Route exact path="/" component={Home}/>
                     <PrivateRoute path="/projects" component={Projects}/>
+                    <PrivateRoute path="/issues" component={Issues}/>
                     <PrivateRoute path="/gantt" component={Gantt}/>
                     <PrivateRoute path="/project/:projectId" component={Project}/>
                     <PrivateRoute path="/project/:projectId/gantt" component={ProjectGantt}/>
