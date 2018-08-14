@@ -39,7 +39,7 @@ class Gantt extends Component<{ match: * }> {
             <div style={{flex: 1, display: 'flex'}}>
                 <Query query={gql`
           query Issues {
-              issues:tasks{
+              issues:tasks(limit:500){
                 id
                 assigned_to_name
                 subject
