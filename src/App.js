@@ -18,6 +18,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import auth from "./auth";
+import Gantt from "./pages/Gantt";
 
 const styles = {
     root: {
@@ -44,6 +45,7 @@ class App extends Component {
                             <ul style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around', flex: 1}}>
                                 <li><Link to="/">Home</Link></li>
                                 <li><Link to="/projects">Projects</Link></li>
+                                <li><Link to="/gantt">Gantt</Link></li>
                                 <li><Link to="/about">About</Link></li>
                             </ul>
                             {auth.isAuthenticated() ? <Button color="inherit" component={Link} to={"/logout"}>Logout</Button> : <Button color="inherit" component={Link} to={"/login"}>Login</Button>}
@@ -51,6 +53,7 @@ class App extends Component {
                     </AppBar>
                     <Route exact path="/" component={Home}/>
                     <PrivateRoute path="/projects" component={Projects}/>
+                    <PrivateRoute path="/gantt" component={Gantt}/>
                     <PrivateRoute path="/project/:projectId" component={Project}/>
                     <PrivateRoute path="/project/:projectId/gantt" component={ProjectGantt}/>
                     <Route path="/about" component={About}/>
