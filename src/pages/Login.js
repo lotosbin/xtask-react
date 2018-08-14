@@ -1,6 +1,23 @@
 import React, {Component} from "react";
 import auth from "../auth";
+import PropTypes from 'prop-types';
+import {withStyles} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
+const styles = theme => ({
+    button: {
+        margin: theme.spacing.unit,
+    },
+    input: {
+        display: 'none',
+    },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: 200,
+    },
+});
 class Login extends Component {
     handleChange = name => event => {
         this.setState({
@@ -21,17 +38,38 @@ class Login extends Component {
         };
     }
 
+    componentDidMount() {
+        let {api_host, api_key} = auth.getAuth()
+        this.setState({api_host})
+    }
     render() {
+        const {classes} = this.props;
         return (
-            <div>
-                <input type="text" value={this.state.api_host}
-                       onChange={this.handleChange('api_host')}/><br/>
-                <input type="text" value={this.state.api_key}
-                       onChange={this.handleChange('api_key')}/><br/>
-                <button onClick={this.handleTap}>Login</button>
+            <div style={{display: 'flex', flexDirection: 'column', width: '100%', alignItems: 'start'}}>
+                <TextField
+                    label="api_host"
+                    className={classes.textField}
+                    style={{width: '100%'}}
+                    onChange={this.handleChange('api_host')}
+                    margin="normal"
+                    value={this.state.api_host}
+                />
+                <TextField
+                    label="api_key"
+                    margin="normal"
+                    value={this.state.api_key}
+                    className={classes.textField}
+                    style={{width: '100%'}}
+                    onChange={this.handleChange('api_key')}/>
+                <Button variant="contained" color="primary" className={classes.button} onClick={this.handleTap}>
+                    Login
+                </Button>
             </div>
         );
     }
 }
 
-export default Login;
+Login.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+export default withStyles(styles)(Login);
