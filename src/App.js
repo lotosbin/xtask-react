@@ -8,8 +8,6 @@ import About from "./pages/About";
 import PrivateRoute from "./router/PrivateRoute";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
-import {ApolloProvider} from "react-apollo";
-import client from "./apollo/client";
 import Projects from "./pages/Projects";
 import Project from "./pages/Project";
 import ProjectGantt from "./pages/ProjectGantt";
@@ -31,11 +29,11 @@ const styles = {
         marginRight: 20,
     },
 };
+
 class App extends Component {
-  render() {
-      const {classes} = this.props;
-      return (
-        <ApolloProvider client={client}>
+    render() {
+        const {classes} = this.props;
+        return (
             <Router>
                 <div className="App">
                     <AppBar position="static">
@@ -64,9 +62,8 @@ class App extends Component {
                     <Route path="/logout" component={Logout}/>
                 </div>
             </Router>
-        </ApolloProvider>
-    );
-  }
+        );
+    }
 }
 
 App.propTypes = {
