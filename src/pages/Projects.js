@@ -15,7 +15,8 @@ const styles = {
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        overflowY: 'scroll',
     },
     card: {
         width: 300,
