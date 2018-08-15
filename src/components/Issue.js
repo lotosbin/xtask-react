@@ -4,6 +4,7 @@ import Button from "@material-ui/core/es/Button/Button";
 import moment from "moment";
 import gql from "graphql-tag";
 import {Mutation} from "react-apollo";
+import PropTypes from "prop-types";
 
 type P = {}
 type S = {}
@@ -91,5 +92,9 @@ class Issue extends Component<P, S> {
         task_update({variables: variables});
     }
 }
+
+Issue.propTypes = {
+    data: PropTypes.object.isRequired,
+};
 
 export default Issue;
