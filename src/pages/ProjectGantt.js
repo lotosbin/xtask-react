@@ -39,7 +39,7 @@ class ProjectGantt extends Component<{ match: * }> {
             <div style={{flex: 1, display: 'flex'}}>
                 <Query query={gql`
           query Project($id: String!) {
-            projects(id:$id) {
+            projects(id:$id,limit:1000) {
               id
               name
               description
@@ -89,9 +89,11 @@ class ProjectGantt extends Component<{ match: * }> {
                         const filterNotEmpty = (issues) => issues.filter(it => !!it);
                         const members = R.compose(R.uniq, filterNotEmpty, get_assigned_to_name)(issues);
 
-                        return <div style={{flex: 1, display: 'flex', flexDirection: 'row'}}>
+                        return <div style={{flex: 1, display: 'flex', flexDirection: 'row', width: '100%'}}>
                             <MemberFilter data={members} onFilter={(it) => this.onFilter(it)}/>
-                            <Gantt columns={columns} rows={rows} onSelect={(i) => this.onSelect(i)}/>
+                            <div style={{height: '100%', width: '100%', overflowY: 'scroll'}}>
+                                <Gantt columns={columns} rows={rows} onSelect={(i) => this.onSelect(i)}/>
+                            </div>
                             <Issue data={this.state.issue}/>
                         </div>
 
