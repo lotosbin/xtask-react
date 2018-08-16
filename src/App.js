@@ -10,7 +10,6 @@ import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Projects from "./pages/Projects";
 import Project from "./pages/Project";
-import ProjectGantt from "./pages/ProjectGantt";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -19,7 +18,6 @@ import auth from "./auth";
 import Gantt from "./pages/Gantt";
 import Issues from "./pages/Issues";
 import Agile from "./pages/Agile";
-import ProjectAgile from "./pages/ProjectAgile";
 import Issue from "./pages/Issue";
 
 const styles = {
@@ -55,17 +53,20 @@ class App extends Component {
                             {auth.isAuthenticated() ? <Button color="inherit" component={Link} to={"/logout"}>Logout</Button> : <Button color="inherit" component={Link} to={"/login"}>Login</Button>}
                         </Toolbar>
                     </AppBar>
-                    <Route exact path="/" component={Home}/>
-                    <PrivateRoute path="/projects" component={Projects}/>
-                    <PrivateRoute path="/issues" component={Issues}/>
-                    <PrivateRoute path="/issue/:id" component={Issue}/>
-                    <PrivateRoute path="/gantt" component={Gantt}/>
-                    <PrivateRoute path="/agile" component={Agile}/>
-                    <PrivateRoute path="/project/:projectId" component={Project}/>
+                    <div style={{flex: 1, minHeight: 0}}>
+                        <Route exact path="/" component={Home}/>
 
-                    <Route path="/about" component={About}/>
-                    <Route path="/login" component={Login}/>
-                    <Route path="/logout" component={Logout}/>
+                        <PrivateRoute path="/projects" component={Projects}/>
+                        <PrivateRoute path="/issues" component={Issues}/>
+                        <PrivateRoute path="/issue/:id" component={Issue}/>
+                        <PrivateRoute path="/gantt" component={Gantt}/>
+                        <PrivateRoute path="/agile" component={Agile}/>
+                        <PrivateRoute path="/project/:projectId" component={Project}/>
+
+                        <Route path="/about" component={About}/>
+                        <Route path="/login" component={Login}/>
+                        <Route path="/logout" component={Logout}/>
+                    </div>
                 </div>
             </Router>
         );

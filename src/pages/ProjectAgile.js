@@ -53,11 +53,12 @@ class ProjectAgile extends Component<{}> {
         return (
             <div style={{flex: 1, display: 'flex'}}>
                 <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'row'}}>
-                    <div>
+                    <div style={{display: 'flex', flex: '0 0 250px', overflowY: 'scroll'}}>
                         <MemberIdFilterContainer onFilter={item => this.onFilter(item)}/>
                     </div>
-                    <div style={{flex: 1}}>
-                        <Query query={gql`
+                    <div style={{flex: 1, minWidth: 0}}>
+                        <div style={{width: '100%', height: '100%', overflowX: 'scroll'}}>
+                            <Query query={gql`
           query Status {
             issue_statuses {
               id
@@ -65,29 +66,27 @@ class ProjectAgile extends Component<{}> {
             }
           }
         `}
-                        >
-                            {({loading, error, data}) => {
-                                if (loading) return <p>Loading...</p>;
-                                if (error) return <p>Error :(</p>;
-                                let {issue_statuses} = data;
-                                return (
-                                    <div style={{width: '100%', height: '100%'}}>
-                                        <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                                            {issue_statuses.map(it => <h1 style={{width: 300}} key={it.id}>{it.name}</h1>)}
+                            >
+                                {({loading, error, data}) => {
+                                    if (loading) return <p>Loading...</p>;
+                                    if (error) return <p>Error :(</p>;
+                                    let {issue_statuses} = data;
+                                    return (
+                                        <div style={{width: '100%', height: '100%'}}>
+                                            <div style={{width: '100%', height: '100%', overflowY: 'scroll', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                                                {issue_statuses.map(it => <AgileColumn
+                                                    project_id={match.params.projectId}
+                                                    assigned_to_id={this.state.filter}
+                                                    status={it}
+                                                    key={it.id} data={[]}
+                                                    onClickItem={item => this.setState({issue: item})}
+                                                />)}
+                                            </div>
                                         </div>
-                                        <div style={{width: '100%', height: '100%', overflowY: 'scroll', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                                            {issue_statuses.map(it => <AgileColumn
-                                                project_id={match.params.projectId}
-                                                assigned_to_id={this.state.filter}
-                                                status={it}
-                                                key={it.id} data={[]}
-                                                onClickItem={item => this.setState({issue: item})}
-                                            />)}
-                                        </div>
-                                    </div>
-                                )
-                            }}
-                        </Query>
+                                    )
+                                }}
+                            </Query>
+                        </div>
                     </div>
                 </div>
                 <Dialog

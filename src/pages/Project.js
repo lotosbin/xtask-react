@@ -12,7 +12,6 @@ class Project extends Component<{ match: any }> {
         let {match} = this.props;
         let projectId = match.params.projectId;
         return (
-            <div>
                 <Query query={gql`
           query Project($id: String!) {
             projects(id:$id) {
@@ -29,7 +28,7 @@ class Project extends Component<{ match: any }> {
                         if (error) return <p>Error :(</p>;
                         let {id, name, description} = data.projects[0];
                         return (
-                            <div style={{width: '100%'}}>
+                            <div style={{height: '100%', minHeight: 0, display: 'flex', flexDirection: 'column'}}>
                                 <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center'}}><h1 title={description}>{id}:{name}</h1>
                                     <div>
                                         <Button size="small" component={Link} to={`/project/${projectId}`}>Home</Button>
@@ -43,7 +42,6 @@ class Project extends Component<{ match: any }> {
                         )
                     }}
                 </Query>
-            </div>
         );
     }
 }

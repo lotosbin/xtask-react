@@ -9,8 +9,14 @@ import {Query} from "react-apollo";
 
 const styles = theme => ({
     root: {
+        height: '100%',
         width: 300,
+        flex: 0,
+        flexShrink: 0,
+        flexBasis: 300,
         backgroundColor: theme.palette.background.paper,
+        display: 'flex',
+        flexDirection: 'column'
     },
     listItem: {}
 });
@@ -29,6 +35,7 @@ class AgileColumn extends React.Component {
         console.log(`AgileColumn:assigned_to_id=${assigned_to_id}`);
         return (
             <div className={classes.root}>
+                <h1 style={{width: 300}} key={status.id}>{status.name}</h1>
                 <Query query={gql`
           query Project($id: String!,$assigned_to_id:String) {
             projects(id:$id,limit:1000) {
@@ -59,7 +66,7 @@ class AgileColumn extends React.Component {
                         if (error) return <p>Error :(</p>;
                         let {issues} = data.projects[0];
                         let filter = issues.filter(it => this.filterStatus(status)(it));
-                        return <List>
+                        return <List style={{flex: 1, overflowY: 'scroll'}}>
                             {filter.map((issue) => {
                                 let {id, subject, assigned_to_name} = issue;
                                 return (
