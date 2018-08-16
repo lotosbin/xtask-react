@@ -25,17 +25,17 @@ class AgileColumn extends React.Component {
 
 
     render() {
-        const {project_id, classes, status} = this.props;
-
+        const {project_id, classes, status, assigned_to_id} = this.props;
+        console.log(`AgileColumn:assigned_to_id=${assigned_to_id}`);
         return (
             <div className={classes.root}>
                 <Query query={gql`
-          query Project($id: String!) {
+          query Project($id: String!,$assigned_to_id:String) {
             projects(id:$id,limit:1000) {
               id
               name
               description
-              issues{
+              issues(assigned_to_id:$assigned_to_id){
                 id
                 assigned_to_name
                 subject
@@ -52,7 +52,7 @@ class AgileColumn extends React.Component {
             }
           }
         `}
-                       variables={{id: project_id}}
+                       variables={{id: project_id, assigned_to_id}}
                 >
                     {({loading, error, data}) => {
                         if (loading) return <p>Loading...</p>;
