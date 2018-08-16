@@ -62,8 +62,7 @@ class App extends Component {
                     <PrivateRoute path="/gantt" component={Gantt}/>
                     <PrivateRoute path="/agile" component={Agile}/>
                     <PrivateRoute path="/project/:projectId" component={Project}/>
-                    <PrivateRoute path="/project/:projectId/gantt" component={ProjectGantt}/>
-                    <PrivateRoute path="/project/:projectId/agile" component={ProjectAgile}/>
+
                     <Route path="/about" component={About}/>
                     <Route path="/login" component={Login}/>
                     <Route path="/logout" component={Logout}/>

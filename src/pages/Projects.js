@@ -61,7 +61,6 @@ const Projects = (props) => {
                                 <Typography variant="headline" component="h2">
                                     {id}:{name}
                                 </Typography>
-
                                 <Typography component="p">
                                     {description}
                                 </Typography>
