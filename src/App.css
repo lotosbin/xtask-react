@@ -31,3 +31,14 @@ html, body, #root, .App {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/*关闭chrome和safari页面弹性效果*/
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  overflow: auto;
+}
