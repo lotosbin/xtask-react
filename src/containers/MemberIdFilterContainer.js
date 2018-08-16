@@ -25,6 +25,7 @@ class MemberIdFilterContainer extends React.Component {
             users (limit:1000){
               id
               name:firstname
+              mail
             }
           }
         `}

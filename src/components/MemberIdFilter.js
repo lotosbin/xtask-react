@@ -5,10 +5,11 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
+import Gravatar from 'react-gravatar'
 
 const styles = theme => ({
     root: {
-        width: 200,
+        width: 250,
         backgroundColor: theme.palette.background.paper,
         overflowY: 'scroll',
     },
@@ -48,7 +49,7 @@ class MemberIdFilter extends React.Component {
             <div className={classes.root}>
                 <List>
                     {this.props.data.map((item) => {
-                        let {id, name} = item;
+                        let {id, name, mail} = item;
                         return (
                             <ListItem
                                 key={id}
@@ -58,12 +59,15 @@ class MemberIdFilter extends React.Component {
                                 onClick={this.handleToggle(item)}
                                 className={classes.listItem}
                             >
+                                <Gravatar email={mail}/>
                                 <Checkbox
                                     checked={this.state.checked.indexOf(id) !== -1}
                                     tabIndex={-1}
                                     disableRipple
                                 />
                                 <ListItemText primary={`${name}`}/>
+
+
                             </ListItem>
                         );
                     })}
