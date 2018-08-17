@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import gql from "graphql-tag";
-import {Query} from "react-apollo";
+import {Mutation, Query} from "react-apollo";
 import AgileColumn from "../components/AgileColumn";
 
 const styles = theme => ({
@@ -19,7 +19,13 @@ const styles = theme => ({
     },
     listItem: {}
 });
-
+const TASK_UPDATE = gql`
+    mutation TaskUpdate($issue_id: String!,$status_id:String!) {
+        task_update(issue_id: $issue_id,status_id:$status_id) {
+            id
+        }
+    }
+`;
 class AgileColumnContainer extends React.Component {
     state = {
         checked: [],
@@ -65,7 +71,23 @@ class AgileColumnContainer extends React.Component {
                             if (error) return <p>Error :(</p>;
                             let {issues} = data;
                             let filter = issues.filter(it => this.filterStatus(status)(it));
-                            return <AgileColumn data={filter} onClickItem={this.props.onClickItem}/>
+                            return <Mutation mutation={TASK_UPDATE}>
+                                {(task_update, {data}) => (
+                                    <AgileColumn
+                                        status={status}
+                                        data={filter}
+                                        onClickItem={this.props.onClickItem}
+                                        onDrop={(issue, status) => {
+                                            console.log(`onDrop:${JSON.stringify(issue)},${JSON.stringify(status)}`);
+                                            let variables = {
+                                                issue_id: issue.id,
+                                                status_id: status.id,
+                                            };
+                                            task_update({variables: variables});
+                                        }}
+                                    />
+                                )}
+                            </Mutation>
                         }}
                     </Query>
                 </div>

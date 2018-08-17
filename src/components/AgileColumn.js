@@ -27,12 +27,30 @@ class AgileColumn extends React.Component {
         if (this.props.onClickItem) this.props.onClickItem(item)
     };
 
+    onDragOver(e) {
+        e.preventDefault();
+    }
 
+    onDrop(e, status) {
+        const issue = JSON.parse(e.dataTransfer.getData("issue"));
+        console.log(`onDrop,issue=${JSON.stringify(issue)},status=${JSON.stringify(status)}`);
+        if (this.props.onDrop) {
+            this.props.onDrop(issue, status)
+        }
+    }
+
+    onDragStart(e, data) {
+        console.log(`onDragStart,data=${JSON.stringify(data)}`);
+        e.dataTransfer.setData("issue", JSON.stringify(data))
+    }
     render() {
-        const {classes, data} = this.props;
+        const {classes, data, status} = this.props;
         return (
-            <div className={classes.root}>
-                <List style={{flex: 1, overflowY: 'scroll'}}>
+            <div className={classes.root}
+                 onDragOver={(e) => this.onDragOver(e)}
+                 onDrop={(e) => this.onDrop(e, status)}>
+
+                <List style={{flex: 1, overflowY: 'scroll', minHeight: '300px'}}>
                     {data.map((issue) => {
                         let {id, subject, assigned_to_name, project: {name: project_name}} = issue;
                         return (
@@ -41,6 +59,8 @@ class AgileColumn extends React.Component {
                                 role={undefined}
                                 dense
                                 button
+                                draggable
+                                onDragStart={(e) => this.onDragStart(e, issue)}
                                 className={classes.listItem}
                                 onClick={e => this.onClickItem(e, issue)}
                             >
