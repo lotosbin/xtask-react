@@ -4,8 +4,6 @@ import {withStyles} from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import gql from "graphql-tag";
-import {Query} from "react-apollo";
 
 const styles = theme => ({
     root: {
@@ -31,67 +29,31 @@ class AgileColumn extends React.Component {
 
 
     render() {
-        const {project_id, classes, status, assigned_to_id} = this.props;
-        console.log(`AgileColumn:assigned_to_id=${assigned_to_id}`);
+        const {classes, data} = this.props;
         return (
             <div className={classes.root}>
-                <h1 style={{width: 300}} key={status.id}>{status.name}</h1>
-                <Query query={gql`
-          query Project($id: String!,$assigned_to_id:String) {
-            projects(id:$id,limit:1000) {
-              id
-              name
-              description
-              issues(assigned_to_id:$assigned_to_id){
-                id
-                assigned_to_name
-                subject
-                start_date
-                due_date
-                relations{
-                    relation_type
-                    issue_to_id
-                }
-                status{
-                    id
-                }
-              }
-            }
-          }
-        `}
-                       variables={{id: project_id, assigned_to_id}}
-                >
-                    {({loading, error, data}) => {
-                        if (loading) return <p>Loading...</p>;
-                        if (error) return <p>Error :(</p>;
-                        let {issues} = data.projects[0];
-                        let filter = issues.filter(it => this.filterStatus(status)(it));
-                        return <List style={{flex: 1, overflowY: 'scroll'}}>
-                            {filter.map((issue) => {
-                                let {id, subject, assigned_to_name} = issue;
-                                return (
-                                    <ListItem
-                                        key={id}
-                                        role={undefined}
-                                        dense
-                                        button
-                                        className={classes.listItem}
-                                        onClick={e => this.onClickItem(e, issue)}
-                                    >
-                                        <ListItemText primary={`${subject}`} secondary={`${assigned_to_name}`}/>
-                                    </ListItem>
-                                );
-                            })}
-                        </List>
-                    }}
-                </Query>
-
+                <List style={{flex: 1, overflowY: 'scroll'}}>
+                    {data.map((issue) => {
+                        let {id, subject, assigned_to_name, project: {name: project_name}} = issue;
+                        return (
+                            <ListItem
+                                key={id}
+                                role={undefined}
+                                dense
+                                button
+                                className={classes.listItem}
+                                onClick={e => this.onClickItem(e, issue)}
+                            >
+                                <ListItemText primary={`${subject}`} secondary={`${assigned_to_name}`}>
+                                    <h1>{project_name}</h1>
+                                    <p>{id}:{subject}</p>
+                                </ListItemText>
+                            </ListItem>
+                        );
+                    })}
+                </List>
             </div>
         );
-    }
-
-    filterStatus(status) {
-        return it => (it.status || {}).id === (status || {}).id;
     }
 }
 

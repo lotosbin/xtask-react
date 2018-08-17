@@ -20,7 +20,8 @@ class MemberIdFilterContainer extends React.Component {
     render() {
 
         return (
-            <Query query={gql`
+            <div style={{display: 'flex', flex: '0 0 250px', overflowY: 'scroll', minHeight: 0}}>
+                <Query query={gql`
           query Status {
             users (limit:1000){
               id
@@ -29,16 +30,17 @@ class MemberIdFilterContainer extends React.Component {
             }
           }
         `}
-            >
-                {({loading, error, data}) => {
-                    if (loading) return <p>Loading...</p>;
-                    if (error) return <p>Error :(</p>;
-                    let {users} = data;
-                    return (
-                        <MemberIdFilter data={users || []} onFilter={this.props.onFilter.bind(this)}/>
-                    )
-                }}
-            </Query>
+                >
+                    {({loading, error, data}) => {
+                        if (loading) return <p>Loading...</p>;
+                        if (error) return <p>Error :(</p>;
+                        let {users} = data;
+                        return (
+                            <MemberIdFilter data={users || []} onFilter={this.props.onFilter.bind(this)}/>
+                        )
+                    }}
+                </Query>
+            </div>
         );
     }
 }

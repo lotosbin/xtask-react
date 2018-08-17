@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Query} from "react-apollo";
 import gql from "graphql-tag";
-import AgileColumn from "../components/AgileColumn";
+import AgileColumn from "../containers/AgileColumnContainer";
 import Dialog from "@material-ui/core/es/Dialog/Dialog";
 import AppBar from "@material-ui/core/es/AppBar/AppBar";
 import Slide from "@material-ui/core/es/Slide/Slide";
