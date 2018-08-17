@@ -36,7 +36,7 @@ class MemberIdFilterContainer extends React.Component {
                         if (error) return <p>Error :(</p>;
                         let {users} = data;
                         return (
-                            <MemberIdFilter data={users || []} onFilter={this.props.onFilter.bind(this)}/>
+                            <MemberIdFilter mode={'single'} data={users || []} onFilter={this.props.onFilter.bind(this)}/>
                         )
                     }}
                 </Query>

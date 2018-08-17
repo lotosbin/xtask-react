@@ -25,14 +25,15 @@ class MemberIdFilter extends React.Component {
         let {id} = value;
         const {checked} = this.state;
         const currentIndex = checked.indexOf(id);
-        const newChecked = [...checked];
-
+        let newChecked = [...checked];
         if (currentIndex === -1) {
+            if (this.props.mode === 'single') {
+                newChecked = [];
+            }
             newChecked.push(id);
         } else {
             newChecked.splice(currentIndex, 1);
         }
-
         this.setState({
             checked: newChecked,
         });
