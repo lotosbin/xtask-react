@@ -45,7 +45,7 @@ class Projects extends Component<{}> {
     render() {
         const {classes} = this.props;
         return (
-            <div style={{height: '100%', minHeight: 0}}>
+            <div style={{height: '100%', minHeight: 0, display: 'flex', flexDirection: 'column'}}>
                 <div style={{display: 'flex', flexDirection: 'row'}}>
                     <Button variant="contained" color={this.state.mode === 'list' ? "primary" : ""} onClick={event => this.setState({mode: 'list'})}>
                         List

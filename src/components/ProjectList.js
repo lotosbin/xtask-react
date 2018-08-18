@@ -44,9 +44,6 @@ let ProjectCardList = props => {
             {projects.map(({id, name, description}) => (
 
                 <ListItem key={id} button>
-                    <ListItemIcon>
-                        <InboxIcon/>
-                    </ListItemIcon>
                     <ListItemText primary={`${id}:${name}`} secondary={`${description}`}/>
                     <ListItemSecondaryAction>
                         <Button size="small" component={Link} to={`/project/${id}`}>Detail</Button>
