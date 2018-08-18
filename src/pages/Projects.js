@@ -1,14 +1,12 @@
-import React from "react";
+import React, {Component} from "react";
 import {Query} from "react-apollo";
 import gql from "graphql-tag";
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import {Link} from "react-router-dom";
+import ProjectCardList from "../components/ProjectCardList";
+import ProjectList from "../components/ProjectList";
+import _ from 'lodash';
+import Button from "@material-ui/core/es/Button/Button";
 
 const styles = {
     card_container: {
@@ -36,11 +34,27 @@ const styles = {
     },
 };
 
-const Projects = (props) => {
-    const {classes} = props;
+class Projects extends Component<{}> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            mode: 'list'
+        };
+    }
 
-    return (
-        <Query query={gql`
+    render() {
+        const {classes} = this.props;
+        return (
+            <div style={{height: '100%', minHeight: 0}}>
+                <div style={{display: 'flex', flexDirection: 'row'}}>
+                    <Button variant="contained" color={this.state.mode === 'list' ? "primary" : ""} onClick={event => this.setState({mode: 'list'})}>
+                        List
+                    </Button>
+                    <Button variant="contained" color={this.state.mode === 'grid' ? "primary" : ""} onClick={event => this.setState({mode: 'grid'})}>
+                        Grid
+                    </Button>
+                </div>
+                <Query query={gql`
           {
             projects {
               id
@@ -49,34 +63,19 @@ const Projects = (props) => {
             }
           }
         `}
-        >
-            {({loading, error, data}) => {
-                if (loading) return <p>Loading...</p>;
-                if (error) return <p>Error :(</p>;
+                >
+                    {({loading, error, data}) => {
+                        if (loading) return <p>Loading...</p>;
+                        if (error) return <p>Error :(</p>;
+                        let projects = _.orderBy(data.projects || [], ['id']);
+                        return this.state.mode === 'grid' ? <ProjectCardList data={projects}/> : <ProjectList data={projects}/>;
+                    }}
+                </Query>
+            </div>
+        );
+    }
+}
 
-                return <div className={classes.card_container}>
-                    {data.projects.map(({id, name, description}) => (
-                        <Card key={id} className={classes.card}>
-                            <CardContent>
-                                <Typography variant="headline" component="h2">
-                                    {id}:{name}
-                                </Typography>
-                                <Typography component="p">
-                                    {description}
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button size="small" component={Link} to={`/project/${id}`}>Detail</Button>
-                                <Button size="small" component={Link} to={`/project/${id}/gantt`}>Gantt</Button>
-                                <Button size="small" component={Link} to={`/project/${id}/agile`}>Agile</Button>
-                            </CardActions>
-                        </Card>
-                    ))}
-                </div>;
-            }}
-        </Query>
-    );
-};
 Projects.propTypes = {
     classes: PropTypes.object.isRequired,
 };
