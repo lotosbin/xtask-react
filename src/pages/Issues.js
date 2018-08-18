@@ -3,12 +3,8 @@ import {Query} from "react-apollo";
 import gql from "graphql-tag";
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import {Link} from "react-router-dom";
+import IssueList from "../components/IssueList";
+import MemberIdFilterContainer from "../containers/MemberIdFilterContainer";
 
 const styles = {
     card_container: {
@@ -18,68 +14,72 @@ const styles = {
         justifyContent: 'space-around',
         overflowY: 'scroll',
     },
-    card: {
-        width: 300,
-        margin: 10
-    },
-    bullet: {
-        display: 'inline-block',
-        margin: '0 2px',
-        transform: 'scale(0.8)',
-    },
-    title: {
-        marginBottom: 16,
-        fontSize: 14,
-    },
-    pos: {
-        marginBottom: 12,
-    },
 };
 
 class Issues extends Component<{}> {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            filter: {}
+        };
+    }
+
+    onFilter(user) {
+        console.log(`onFilter:${JSON.stringify(user)}`);
+        if (user && user.length) {
+            this.setState({filter: user[0]})
+        }
+        else {
+            this.setState({filter: {}})
+        }
+        this.forceUpdate()
     }
 
     render() {
         const {classes} = this.props;
+        let {id: assigned_to_id} = this.state.filter;
         return (
-            <Query query={gql`
-          {
-            projects {
-              id
-              name
-              description
+            <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'row'}}>
+                <div style={{display: 'flex', flex: '0 0 250px', overflowY: 'scroll'}}>
+                    <MemberIdFilterContainer onFilter={item => this.onFilter(item)}/>
+                </div>
+                <div style={{flex: 1, minWidth: 0}}>
+                    <div style={{width: '100%', height: '100%', overflowX: 'scroll'}}>
+                        <Query query={gql`
+          query Issues($assigned_to_id:String) {
+            issues(assigned_to_id:$assigned_to_id,limit:500){
+                id
+                assigned_to_name
+                subject
+                start_date
+                due_date
+                relations{
+                    relation_type
+                    issue_to_id
+                }
+                status{
+                    id
+                }
+                project{
+                id
+                name
+                }
             }
           }
         `}
-            >
-                {({loading, error, data}) => {
-                    if (loading) return <p>Loading...</p>;
-                    if (error) return <p>Error :(</p>;
-
-                    return <div className={classes.card_container}>
-                        {data.projects.map(({id, name, description}) => (
-                            <Card key={id} className={classes.card}>
-                                <CardContent>
-                                    <Typography variant="headline" component="h2">
-                                        {id}:{name}
-                                    </Typography>
-
-                                    <Typography component="p">
-                                        {description}
-                                    </Typography>
-                                </CardContent>
-                                <CardActions>
-                                    <Button size="small" component={Link} to={`/project/${id}`}>Detail</Button>
-                                    <Button size="small" component={Link} to={`/project/${id}/gantt`}>Gantt</Button>
-                                </CardActions>
-                            </Card>
-                        ))}
-                    </div>;
-                }}
-            </Query>
+                               variables={{assigned_to_id: assigned_to_id}}
+                        >
+                            {({loading, error, data}) => {
+                                if (loading) return <p>Loading...</p>;
+                                if (error) return <p>Error :(</p>;
+                                return <div className={classes.card_container}>
+                                    <IssueList data={data.issues}/>
+                                </div>;
+                            }}
+                        </Query>
+                    </div>
+                </div>
+            </div>
         );
     }
 }

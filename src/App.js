@@ -53,7 +53,7 @@ class App extends Component {
                             {auth.isAuthenticated() ? <Button color="inherit" component={Link} to={"/logout"}>Logout</Button> : <Button color="inherit" component={Link} to={"/login"}>Login</Button>}
                         </Toolbar>
                     </AppBar>
-                    <div style={{flex: 1, minHeight: 0}}>
+                    <div style={{flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column'}}>
                         <Route exact path="/" component={Home}/>
 
                         <PrivateRoute path="/projects" component={Projects}/>
