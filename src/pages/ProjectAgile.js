@@ -10,7 +10,7 @@ import Toolbar from "@material-ui/core/es/Toolbar/Toolbar";
 import IconButton from "@material-ui/core/es/IconButton/IconButton";
 import CloseIcon from '@material-ui/icons/Close';
 import Issue from "../components/Issue";
-import MemberIdFilterContainer from "../containers/MemberIdFilterContainer";
+import ProjectMemberIdFilterContainer from "../containers/ProjectMemberIdFilterContainer";
 
 const styles = {
     appBar: {
@@ -49,12 +49,12 @@ class ProjectAgile extends Component<{}> {
         }
     }
     render() {
-        let {match, classes} = this.props;
+        let {match: {params: {projectId}}, classes} = this.props;
         return (
             <div style={{flex: 1, display: 'flex'}}>
                 <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'row'}}>
                     <div style={{display: 'flex', flex: '0 0 250px', overflowY: 'scroll'}}>
-                        <MemberIdFilterContainer onFilter={item => this.onFilter(item)}/>
+                        <ProjectMemberIdFilterContainer projectId={projectId} onFilter={item => this.onFilter(item)}/>
                     </div>
                     <div style={{flex: 1, minWidth: 0}}>
                         <div style={{width: '100%', height: '100%', overflowX: 'scroll'}}>
@@ -75,7 +75,7 @@ class ProjectAgile extends Component<{}> {
                                         <div style={{width: '100%', height: '100%'}}>
                                             <div style={{width: '100%', height: '100%', overflowY: 'scroll', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                                                 {issue_statuses.map(it => <AgileColumn
-                                                    project_id={match.params.projectId}
+                                                    project_id={projectId}
                                                     assigned_to_id={this.state.filter}
                                                     status={it}
                                                     key={it.id} data={[]}
