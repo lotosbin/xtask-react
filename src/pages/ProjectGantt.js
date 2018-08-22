@@ -2,24 +2,8 @@ import React, {Component} from "react";
 import Gantt from "../components/Gantt";
 import gql from "graphql-tag";
 import {Query} from "react-apollo";
-import moment from "moment";
 import Issue from "../components/Issue";
 import ProjectMemberIdFilterContainer from "../containers/ProjectMemberIdFilterContainer";
-
-function daysToMilliseconds(days) {
-    return days * 24 * 60 * 60 * 1000;
-}
-
-const columns = [
-    {type: "string", label: "Task ID"},
-    {type: "string", label: "Task Name"},
-    {type: "string", label: "Resource"},
-    {type: "date", label: "Start Date"},
-    {type: "date", label: "End Date"},
-    {type: "number", label: "Duration"},
-    {type: "number", label: "Percent Complete"},
-    {type: "string", label: "Dependencies"}
-];
 
 class ProjectGantt extends Component<{ match: * }> {
     constructor(props) {
@@ -63,27 +47,10 @@ class ProjectGantt extends Component<{ match: * }> {
                             if (loading) return <p>Loading...</p>;
                             if (error) return <p>Error :(</p>;
                             let {issues} = data.projects[0];
-                            let mapToRow = issues => issues.map(it => {
-                                let start_date = moment(it.start_date).toDate() || new Date(2015, 0, 1);
-                                let due_date = moment(it.due_date).toDate() || moment(start_date).add(1, 'd').toDate();
-                                let issue_id = it.id;
-                                let relation = it.relations && it.relations.length ? (it.relations || []).filter(it => it.issue_to_id != issue_id).map(it => it.issue_to_id).join(",") : null;
-                                return [
-                                    `${it.id}`,
-                                    it.subject,
-                                    it.assigned_to_name,
-                                    start_date,
-                                    due_date,
-                                    null,
-                                    100,
-                                    null
-                                ]
-                            });
+
                             this.data = issues;
-                            let rows = (mapToRow)(issues);
-                            console.dir(rows);
                             return <div style={{height: '100%', width: '100%', overflowY: 'scroll'}}>
-                                <Gantt columns={columns} rows={rows} onSelect={(i) => this.onSelect(i)}/>
+                                <Gantt data={issues} onSelect={(i) => this.onSelect(i)}/>
                             </div>
                         }}
                     </Query>
