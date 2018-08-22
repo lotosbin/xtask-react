@@ -1,0 +1,16 @@
+[ignore]
+./node_modules/
+./public/
+./scripts/
+
+[include]
+./src/**/*.js
+
+[libs]
+
+[lints]
+
+[options]
+all=true
+
+[strict]

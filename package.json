@@ -108,6 +108,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "flow-bin": "^0.79.1",
     "redux-devtools": "^3.4.1",
     "redux-devtools-extension": "^2.13.5"
   }
