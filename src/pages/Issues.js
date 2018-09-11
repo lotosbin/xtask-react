@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import IssueList from "../components/IssueList";
 import MemberIdFilterContainer from "../containers/MemberIdFilterContainer";
+import StatusFilterContainer from "../containers/StatusFilterContainer";
 
 const styles = {
     card_container: {
@@ -20,7 +21,8 @@ class Issues extends Component<{}> {
     constructor(props) {
         super(props);
         this.state = {
-            filter: {}
+            filter: {},
+            status: {},
         };
     }
 
@@ -43,6 +45,7 @@ class Issues extends Component<{}> {
                 <div style={{display: 'flex', flex: '0 0 250px', overflowY: 'scroll'}}>
                     <MemberIdFilterContainer onFilter={item => this.onFilter(item)}/>
                 </div>
+                <StatusFilterContainer onFilter={item => this.onStatusFilter(item)}/>
                 <div style={{flex: 1, minWidth: 0}}>
                     <div style={{width: '100%', height: '100%', overflowX: 'scroll'}}>
                         <Query query={gql`
@@ -59,6 +62,7 @@ class Issues extends Component<{}> {
                 }
                 status{
                     id
+                    name
                 }
                 project{
                 id
@@ -72,8 +76,12 @@ class Issues extends Component<{}> {
                             {({loading, error, data}) => {
                                 if (loading) return <p>Loading...</p>;
                                 if (error) return <p>Error :(</p>;
+                                let statusFilterId = this.state.status.id;
+                                let issues = (data.issues || [])
+                                    .filter(it => !statusFilterId || statusFilterId === it.status.id)
+                                    .map(it => ({...it, subject: `${it.subject}[${it.status.name}]`}));
                                 return <div className={classes.card_container}>
-                                    <IssueList data={data.issues}/>
+                                    <IssueList data={issues}/>
                                 </div>;
                             }}
                         </Query>
@@ -81,6 +89,15 @@ class Issues extends Component<{}> {
                 </div>
             </div>
         );
+    }
+
+    onStatusFilter(it) {
+        if (it && it.length > 0) {
+            this.setState({status: it[0]});
+        } else {
+            this.setState({status: {}});
+        }
+        this.forceUpdate()
     }
 }
 
