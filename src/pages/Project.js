@@ -6,6 +6,7 @@ import ProjectGantt from "./ProjectGantt";
 import ProjectAgile from "./ProjectAgile";
 import Button from "../../node_modules/@material-ui/core/Button/Button";
 import {Link} from "react-router-dom";
+import ProjectHome from "./ProjectHome";
 
 class Project extends Component<{ match: any }> {
     render() {
@@ -31,11 +32,12 @@ class Project extends Component<{ match: any }> {
                     }}
                 </Query>
                 <div>
-                    <Button size="small" component={Link} to={`/project/${projectId}`}>Home</Button>
+                    <Button size="small" component={Link} to={`/project/${projectId}/home`}>Home</Button>
                     <Button size="small" component={Link} to={`/project/${projectId}/gantt`}>Gantt</Button>
                     <Button size="small" component={Link} to={`/project/${projectId}/agile`}>Agile</Button>
                 </div>
             </div>
+            <PrivateRoute path="/project/:projectId/home" component={ProjectHome}/>
             <PrivateRoute path="/project/:projectId/gantt" component={ProjectGantt}/>
             <PrivateRoute path="/project/:projectId/agile" component={ProjectAgile}/>
         </div>
