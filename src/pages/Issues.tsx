@@ -1,10 +1,14 @@
+import {Tab, Tabs} from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles";
+import {AccessTime, List} from "@material-ui/icons";
+import FavoriteIcon from "@material-ui/icons/Favorite";
 import gql from "graphql-tag";
 import React, {Component} from "react";
 import {Query} from "react-apollo";
 import IssueList from "../components/IssueList";
 import MemberIdFilterContainer from "../containers/MemberIdFilterContainer";
 import ProjectIdFilterContainer from "../containers/ProjectIdFilterContainer";
+import ProjectIdRecentFilterContainer from "../containers/ProjectIdRecentFilterContainer";
 import StatusFilterContainer from "../containers/StatusFilterContainer";
 
 const styles: any = {
@@ -45,6 +49,7 @@ class Issues extends Component<any, any> {
             filter: {},
             filter_project: {},
             status: {},
+            value: 0,
         };
     }
 
@@ -68,13 +73,23 @@ class Issues extends Component<any, any> {
 
     public render() {
         const {classes} = this.props;
+        const {value} = this.state;
         const {id: assigned_to_id} = this.state.filter;
         const {id: project_id} = this.state.filter_project;
 
         return (
             <div style={{width: "100%", height: "100%", display: "flex", flexDirection: "row"}}>
-                <div style={{display: "flex", flex: "0 0 250px", overflowY: "scroll"}}>
-                    <ProjectIdFilterContainer onFilter={(item: any[]) => this.onProjectFilter(item)}/>
+                <div style={{display: "flex", flex: "0 0 250px", flexDirection: "column"}}>
+                    <div style={{width: "250px"}}>
+                        <Tabs value={value} onChange={this.handleChange} fullWidth>
+                            <Tab icon={<List/>}/>
+                            <Tab icon={<AccessTime/>}/>
+                        </Tabs>
+                    </div>
+                    <div style={{display: "flex", flex: "1 0 250px", overflowY: "scroll"}}>
+                        {value === 0 && <ProjectIdFilterContainer onFilter={(item: any[]) => this.onProjectFilter(item)}/>}
+                        {value === 1 && <ProjectIdRecentFilterContainer onFilter={(item: any[]) => this.onProjectFilter(item)}/>}
+                    </div>
                 </div>
                 <div style={{display: "flex", flex: "0 0 250px", overflowY: "scroll"}}>
                     <MemberIdFilterContainer onFilter={(item: any[]) => this.onFilter(item)}/>
@@ -112,6 +127,10 @@ class Issues extends Component<any, any> {
             this.setState({status: {}});
         }
         this.forceUpdate();
+    }
+
+    public handleChange = (event: any, value: any) => {
+        this.setState({value});
     }
 }
 

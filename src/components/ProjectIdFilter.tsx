@@ -3,9 +3,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import {withStyles} from "@material-ui/core/styles";
-import PropTypes from "prop-types";
 import React from "react";
-import Gravatar from "react-gravatar";
 
 const styles: any = (theme: { palette: { background: { paper: any; }; }; }) => ({
     root: {
@@ -16,10 +14,19 @@ const styles: any = (theme: { palette: { background: { paper: any; }; }; }) => (
     listItem: {},
 });
 
-class ProjectIdFilter extends React.Component<any> {
-    public static propTypes: {
-        onFilter: PropTypes.Requireable<(...args: any[]) => any>;
-    };
+export interface IProject {
+    id: string;
+    name?: string;
+}
+
+interface IProjectIdFilterProps {
+    data: IProject[];
+    onFilter: any;
+    classes?: any;
+    mode?: "single" | undefined | null;
+}
+
+class ProjectIdFilter extends React.Component<IProjectIdFilterProps> {
     public state = {
         checked: [],
     };
@@ -50,29 +57,15 @@ class ProjectIdFilter extends React.Component<any> {
 
     public render() {
         const {classes} = this.props;
-
         return (
             <div className={classes.root}>
                 <List>
-                    {this.props.data.map(({id, name}: { id: any; name?: any; }) => {
-                        return (
-                            <ListItem
-                                key={id}
-                                role={undefined}
-                                dense
-                                button
-                                onClick={this.handleToggle({id})}
-                                className={classes.listItem}
-                            >
-                                <Checkbox
-                                    checked={(this.state.checked as any[]).indexOf(id) !== -1}
-                                    tabIndex={-1}
-                                    disableRipple
-                                />
-                                <ListItemText primary={`${name}`}/>
+                    {this.props.data.map((project) => {
+                        return <ListItem key={project.id} role={undefined} dense button onClick={this.handleToggle({id: project.id})} className={classes.listItem}>
+                            <Checkbox checked={(this.state.checked as any[]).indexOf(project.id) !== -1} tabIndex={-1} disableRipple/>
+                            <ListItemText primary={`${project.name}`}/>
 
-                            </ListItem>
-                        );
+                        </ListItem>;
                     })}
                 </List>
             </div>
