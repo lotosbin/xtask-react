@@ -2,6 +2,7 @@ import _ from "lodash";
 import {Action, combineReducers, createStore} from "redux";
 import {devToolsEnhancer} from "redux-devtools-extension";
 import {IProject} from "../components/ProjectIdFilter";
+import {IMember} from "../components/MemberIdFilter";
 
 function counter(state = 0, action: any) {
     switch (action.type) {
@@ -26,8 +27,20 @@ function recentProject(state: any, action: { type: string, payload: IProject }) 
     }
 }
 
+function recentMember(state: any, action: { type: string, payload: IMember }) {
+    switch (action.type) {
+        case "RECENT_MEMBER":
+            return {
+                ...state,
+                list: [action.payload, ..._.filter(state.list, (it) => it.id !== action.payload.id)].slice(0, 5),
+            };
+        default:
+            return state || {list: []};
+    }
+}
 const reducers = combineReducers({
     counter,
+    recentMember,
     recentProject,
     // apollo: client.reducer(),
 });

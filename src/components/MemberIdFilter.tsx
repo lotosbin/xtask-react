@@ -16,6 +16,12 @@ const styles: any = (theme: { palette: { background: { paper: any; }; }; }) => (
     listItem: {},
 });
 
+export interface IMember {
+    id: any;
+    name?: any;
+    mail?: any;
+}
+
 class MemberIdFilter extends React.Component<any> {
     public static propTypes: {
         onFilter: PropTypes.Requireable<(...args: any[]) => any>;
@@ -54,7 +60,7 @@ class MemberIdFilter extends React.Component<any> {
         return (
             <div className={classes.root}>
                 <List>
-                    {this.props.data.map((item: { id: any; name?: any; mail?: any; }) => {
+                    {this.props.data.map((item: IMember) => {
                         const {id, name, mail} = item;
                         return (
                             <ListItem

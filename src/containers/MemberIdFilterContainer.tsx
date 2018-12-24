@@ -1,6 +1,5 @@
 import {withStyles} from "@material-ui/core/styles";
 import gql from "graphql-tag";
-import PropTypes from "prop-types";
 import React from "react";
 import {Query} from "react-apollo";
 import MemberIdFilter from "../components/MemberIdFilter";

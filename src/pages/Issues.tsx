@@ -10,6 +10,7 @@ import MemberIdFilterContainer from "../containers/MemberIdFilterContainer";
 import ProjectIdFilterContainer from "../containers/ProjectIdFilterContainer";
 import ProjectIdRecentFilterContainer from "../containers/ProjectIdRecentFilterContainer";
 import StatusFilterContainer from "../containers/StatusFilterContainer";
+import MemberIdFilterTabContainer from "./issues/containers/MemberIdFilterTabContainer";
 
 const styles: any = {
     card_container: {
@@ -91,9 +92,7 @@ class Issues extends Component<any, any> {
                         {value === 1 && <ProjectIdRecentFilterContainer onFilter={(item: any[]) => this.onProjectFilter(item)}/>}
                     </div>
                 </div>
-                <div style={{display: "flex", flex: "0 0 250px", overflowY: "scroll"}}>
-                    <MemberIdFilterContainer onFilter={(item: any[]) => this.onFilter(item)}/>
-                </div>
+                <MemberIdFilterTabContainer onFilter={(item: any[]) => this.onFilter(item)}/>
                 <StatusFilterContainer onFilter={(item: any) => this.onStatusFilter(item)}/>
                 <div style={{flex: 1, minWidth: 0}}>
                     <div style={{width: "100%", height: "100%", overflowX: "scroll"}}>
