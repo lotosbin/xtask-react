@@ -1,6 +1,5 @@
 import {withStyles} from "@material-ui/core/styles";
 import gql from "graphql-tag";
-import PropTypes from "prop-types";
 import React from "react";
 import {Query} from "react-apollo";
 import StatusFilter from "../components/StatusFilter";
@@ -14,22 +13,19 @@ const styles: any = (theme: { palette: { background: { paper: any; }; }; }) => (
     },
     listItem: {},
 });
-
+const query: any = gql`
+    query Status {
+        issue_statuses {
+            id
+            name
+        }
+    }
+`;
 class StatusFilterContainer extends React.Component<any> {
-
     public render() {
-
         return (
             <div style={{display: "flex", flex: "0 0 250px", overflowY: "scroll", minHeight: 0}}>
-                <Query query={gql`
-          query Status {
-            issue_statuses {
-              id
-              name
-            }
-          }
-        `}
-                >
+                <Query query={query}>
                     {({loading, error, data}) => {
                         if (loading) {
                             return <p>Loading...</p>;

@@ -12,6 +12,7 @@ import ProjectIdRecentFilterContainer from "../containers/ProjectIdRecentFilterC
 import StatusFilterContainer from "../containers/StatusFilterContainer";
 import MemberIdFilterTabContainer from "./issues/containers/MemberIdFilterTabContainer";
 import ProjectIdFilterTabContainer from "./issues/containers/ProjectIdFilterTabContainer";
+import StatusFilterTabContainer from "./issues/containers/StatusFilterTabContainer";
 
 const styles: any = {
     card_container: {
@@ -83,7 +84,7 @@ class Issues extends Component<any, any> {
             <div style={{width: "100%", height: "100%", display: "flex", flexDirection: "row"}}>
                 <ProjectIdFilterTabContainer onFilter={(item: any[]) => this.onProjectFilter(item)}/>
                 <MemberIdFilterTabContainer onFilter={(item: any[]) => this.onFilter(item)}/>
-                <StatusFilterContainer onFilter={(item: any) => this.onStatusFilter(item)}/>
+                <StatusFilterTabContainer onFilter={(item: any[]) => this.onStatusFilter(item)}/>
                 <div style={{flex: 1, minWidth: 0}}>
                     <div style={{width: "100%", height: "100%", overflowX: "scroll"}}>
                         <Query query={query} variables={{assigned_to_id, project_id}}>

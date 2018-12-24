@@ -15,7 +15,19 @@ const styles: any = (theme: { palette: { background: { paper: any; }; }; }) => (
     listItem: {},
 });
 
-class StatusFilter extends React.Component<any> {
+export interface IStatus {
+    id: any;
+    name?: any;
+}
+
+interface IStatusFilterProps {
+    data: IStatus[];
+    mode?: "single";
+    onFilter: any;
+    classes?: any;
+}
+
+class StatusFilter extends React.Component<IStatusFilterProps> {
     public static propTypes: { classes: PropTypes.Validator<object>; data: PropTypes.Validator<object>; onFilter: PropTypes.Requireable<(...args: any[]) => any>; };
     public state = {
         checked: [],
@@ -51,7 +63,7 @@ class StatusFilter extends React.Component<any> {
         return (
             <div className={classes.root}>
                 <List>
-                    {this.props.data.map((item: { id: any; name?: any; }) => {
+                    {this.props.data.map((item: IStatus) => {
                         const {id, name} = item;
                         return (
                             <ListItem
