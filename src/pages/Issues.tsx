@@ -11,6 +11,7 @@ import ProjectIdFilterContainer from "../containers/ProjectIdFilterContainer";
 import ProjectIdRecentFilterContainer from "../containers/ProjectIdRecentFilterContainer";
 import StatusFilterContainer from "../containers/StatusFilterContainer";
 import MemberIdFilterTabContainer from "./issues/containers/MemberIdFilterTabContainer";
+import ProjectIdFilterTabContainer from "./issues/containers/ProjectIdFilterTabContainer";
 
 const styles: any = {
     card_container: {
@@ -80,18 +81,7 @@ class Issues extends Component<any, any> {
 
         return (
             <div style={{width: "100%", height: "100%", display: "flex", flexDirection: "row"}}>
-                <div style={{display: "flex", flex: "0 0 250px", flexDirection: "column"}}>
-                    <div style={{width: "250px"}}>
-                        <Tabs value={value} onChange={this.handleChange} fullWidth>
-                            <Tab icon={<List/>}/>
-                            <Tab icon={<AccessTime/>}/>
-                        </Tabs>
-                    </div>
-                    <div style={{display: "flex", flex: "1 0 250px", overflowY: "scroll"}}>
-                        {value === 0 && <ProjectIdFilterContainer onFilter={(item: any[]) => this.onProjectFilter(item)}/>}
-                        {value === 1 && <ProjectIdRecentFilterContainer onFilter={(item: any[]) => this.onProjectFilter(item)}/>}
-                    </div>
-                </div>
+                <ProjectIdFilterTabContainer onFilter={(item: any[]) => this.onProjectFilter(item)}/>
                 <MemberIdFilterTabContainer onFilter={(item: any[]) => this.onFilter(item)}/>
                 <StatusFilterContainer onFilter={(item: any) => this.onStatusFilter(item)}/>
                 <div style={{flex: 1, minWidth: 0}}>
