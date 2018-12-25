@@ -1,16 +1,10 @@
 import {withStyles} from "@material-ui/core";
-import AppBar from "@material-ui/core/es/AppBar/AppBar";
-import Dialog from "@material-ui/core/es/Dialog/Dialog";
-import IconButton from "@material-ui/core/es/IconButton/IconButton";
-import Slide from "@material-ui/core/es/Slide/Slide";
-import Toolbar from "@material-ui/core/es/Toolbar/Toolbar";
-import CloseIcon from "@material-ui/icons/Close";
 import gql from "graphql-tag";
 import React, {Component} from "react";
 import {Query} from "react-apollo";
-import Issue from "../components/Issue";
 import AgileColumn from "../containers/AgileColumnContainer";
 import ProjectMemberIdFilterContainer from "../containers/ProjectMemberIdFilterContainer";
+import IssueDialog from "./ProjectHome";
 
 const styles: any = {
     appBar: {
@@ -20,11 +14,6 @@ const styles: any = {
         flex: 1,
     },
 };
-
-function Transition(props: any) {
-    return <Slide direction="up" {...props} />;
-}
-
 class ProjectAgile extends Component<any, any> {
 
     constructor(props: any) {
@@ -33,11 +22,6 @@ class ProjectAgile extends Component<any, any> {
             filter: "",
             issue: null,
         };
-
-    }
-
-    public handleClose = () => {
-        this.setState({issue: null});
     }
 
     public onFilter(user: Array<{ id: any; }>) {
@@ -93,21 +77,7 @@ class ProjectAgile extends Component<any, any> {
                         </div>
                     </div>
                 </div>
-                <Dialog
-                    fullScreen
-                    open={!!this.state.issue}
-                    onClose={this.handleClose}
-                    TransitionComponent={Transition}
-                >
-                    <AppBar className={classes.appBar}>
-                        <Toolbar>
-                            <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
-                                <CloseIcon/>
-                            </IconButton>
-                        </Toolbar>
-                    </AppBar>
-                    <Issue data={this.state.issue}/>
-                </Dialog>
+                <IssueDialog data={this.state.issue}/>
             </div>
         );
     }

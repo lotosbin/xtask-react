@@ -1,17 +1,11 @@
 import {withStyles} from "@material-ui/core";
-import AppBar from "@material-ui/core/es/AppBar/AppBar";
-import Dialog from "@material-ui/core/es/Dialog/Dialog";
-import IconButton from "@material-ui/core/es/IconButton/IconButton";
-import Slide from "@material-ui/core/es/Slide/Slide";
-import Toolbar from "@material-ui/core/es/Toolbar/Toolbar";
-import CloseIcon from "@material-ui/icons/Close";
 import gql from "graphql-tag";
 import React, {Component} from "react";
 import {Query} from "react-apollo";
 import Gantt, {IGanttIssue} from "../components/Gantt";
-import Issue from "../components/Issue";
 import AgileColumn from "../containers/AgileColumnContainer";
 import ProjectMemberIdFilterContainer from "../containers/ProjectMemberIdFilterContainer";
+import IssueDialog from "./issues/components/IssueDialog";
 
 const styles: any = {
     appBar: {
@@ -21,11 +15,6 @@ const styles: any = {
         flex: 1,
     },
 };
-
-function Transition(props: any) {
-    return <Slide direction="up" {...props} />;
-}
-
 const query = gql`query ProjectHomeGantt($id: String!,$assigned_to_id:String) {
     projects(id:$id,limit:1000) {
         id
@@ -54,11 +43,6 @@ class ProjectHome extends Component<any, any> {
         };
 
     }
-
-    public handleClose = () => {
-        this.setState({issue: null});
-    }
-
     public onFilter(user: Array<{ id: any; }>) {
         if (user && user.length) {
             this.setState({filter: user[0].id});
@@ -72,7 +56,7 @@ class ProjectHome extends Component<any, any> {
     }
 
     public render() {
-        const {match: {params: {projectId}}, classes} = this.props;
+        const {match: {params: {projectId}}} = this.props;
 
         return (
             <div style={{flex: 1, display: "flex"}}>
@@ -125,16 +109,7 @@ class ProjectHome extends Component<any, any> {
                         </div>
                     </div>
                 </div>
-                <Dialog fullScreen open={!!this.state.issue} onClose={this.handleClose} TransitionComponent={Transition}>
-                    <AppBar className={classes.appBar}>
-                        <Toolbar>
-                            <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
-                                <CloseIcon/>
-                            </IconButton>
-                        </Toolbar>
-                    </AppBar>
-                    <Issue data={this.state.issue}/>
-                </Dialog>
+                <IssueDialog data={this.state.issue}/>
             </div>
         );
     }

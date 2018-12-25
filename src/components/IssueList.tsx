@@ -17,15 +17,29 @@ const styles: any = {
     },
 };
 
-const IssueList = (props: { classes: any; data: any[]; }) => {
+interface IIssueListItem {
+    id: any;
+    subject: any;
+    project: any;
+    assigned_to_name: any
+}
+
+interface IIssueListProps {
+    classes: any;
+    data: any[];
+
+    onClickItem(parameter: IIssueListItem): any;
+}
+
+const IssueList = (props: IIssueListProps) => {
     const {classes, data: issues} = props;
     return <div className={classes.card_container}>
         <List component="nav">
-            {issues.length > 0 ? issues.map((parameter: { id: any, subject: any, project: any, assigned_to_name: any }) => (
-                <ListItem key={parameter.id} button>
-                    <Chip label={parameter.project.name}/>
-                    <ListItemText primary={`${parameter.id}:${parameter.subject}`}/>
-                    <Chip label={parameter.assigned_to_name}/>
+            {issues.length > 0 ? issues.map((issue) => (
+                <ListItem key={issue.id} button onClick={() => props.onClickItem(issue)}>
+                    <Chip label={issue.project.name}/>
+                    <ListItemText primary={`${issue.id}:${issue.subject}`}/>
+                    <Chip label={issue.assigned_to_name}/>
                 </ListItem>
             )) : <div>No Data</div>}
         </List>

@@ -10,6 +10,8 @@ import MemberIdFilterContainer from "../containers/MemberIdFilterContainer";
 import ProjectIdFilterContainer from "../containers/ProjectIdFilterContainer";
 import ProjectIdRecentFilterContainer from "../containers/ProjectIdRecentFilterContainer";
 import StatusFilterContainer from "../containers/StatusFilterContainer";
+import IssueDialog from "./issues/components/IssueDialog";
+import GanttContainer from "./issues/containers/GanttContainer";
 import MemberIdFilterTabContainer from "./issues/containers/MemberIdFilterTabContainer";
 import ProjectIdFilterTabContainer from "./issues/containers/ProjectIdFilterTabContainer";
 import StatusFilterTabContainer from "./issues/containers/StatusFilterTabContainer";
@@ -46,11 +48,13 @@ const query: any = gql`query Issues($assigned_to_id:String, $project_id:String) 
 } `;
 
 class Issues extends Component<any, any> {
+    private dialog?: IssueDialog;
     constructor(props: any) {
         super(props);
         this.state = {
             filter: {},
             filter_project: {},
+            issue: null,
             status: {},
             value: 0,
         };
@@ -86,7 +90,10 @@ class Issues extends Component<any, any> {
                 <MemberIdFilterTabContainer onFilter={(item: any[]) => this.onFilter(item)}/>
                 <StatusFilterTabContainer onFilter={(item: any[]) => this.onStatusFilter(item)}/>
                 <div style={{flex: 1, minWidth: 0}}>
-                    <div style={{width: "100%", height: "100%", overflowX: "scroll"}}>
+                    <div style={{width: "100%", height: "50%", overflowX: "scroll"}}>
+                        <GanttContainer projectId={project_id} memberId={assigned_to_id}/>
+                    </div>
+                    <div style={{width: "100%", height: "50%", overflowX: "scroll"}}>
                         <Query query={query} variables={{assigned_to_id, project_id}}>
                             {({loading, error, data}) => {
                                 if (loading) {
@@ -100,12 +107,13 @@ class Issues extends Component<any, any> {
                                     .filter((it: { status: { id: any; }; }) => !statusFilterId || statusFilterId === it.status.id)
                                     .map((it: { subject: any; status: { name: any; }; }) => ({...it, subject: `${it.subject}[${it.status.name}]`}));
                                 return <div className={classes.card_container}>
-                                    <IssueList data={issues}/>
+                                    <IssueList data={issues} onClickItem={(issue) => this.showIssueDetail(issue)}/>
                                 </div>;
                             }}
                         </Query>
                     </div>
                 </div>
+                <IssueDialog ref={(dialog: IssueDialog) => this.dialog = dialog}/>
             </div>
         );
     }
@@ -119,8 +127,14 @@ class Issues extends Component<any, any> {
         this.forceUpdate();
     }
 
-    public handleChange = (event: any, value: any) => {
+    public handleChange(event: any, value: any) {
         this.setState({value});
+    }
+
+    private showIssueDetail(issue: any) {
+        if (this.dialog) {
+            this.dialog.show(issue);
+        }
     }
 }
 
