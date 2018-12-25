@@ -10,7 +10,7 @@ class MemberIdFilterTabContainer extends Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-            value: 0,
+            value: 1,
         };
     }
 
