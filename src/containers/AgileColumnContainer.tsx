@@ -46,27 +46,31 @@ class AgileColumnContainer extends React.Component<any> {
             <div className={classes.root}>
                 <h1 style={{width: 300}} key={status.id}>{status.name}</h1>
                 <div style={{minHeight: 0, overflowY: "scroll"}}>
-                    <Query query={gql`
-          query Agile($assigned_to_id:String,$project_id:String) {
-            issues(project_id:$project_id,assigned_to_id:$assigned_to_id,limit:500){
-                id
-                assigned_to_name
-                subject
-                start_date
-                due_date
-                relations{
-                    relation_type
-                    issue_to_id
-                }
-                status{
-                    id
-                }
-                project{
-                id
-                name
-                }
-            }
-          }
+                    <Query query={gql`query Agile($assigned_to_id:String,$project_id:String) {
+    issues(project_id:$project_id,assigned_to_id:$assigned_to_id,limit:500){
+        id
+        assigned_to_name
+        assigned_to{
+            id
+            name:login
+            mail
+        }
+        subject
+        start_date
+        due_date
+        relations{
+            relation_type
+            issue_to_id
+        }
+        status{
+            id
+        }
+        project{
+            id
+            name
+        }
+    }
+}
         `}
                            variables={{project_id, assigned_to_id}}
                     >

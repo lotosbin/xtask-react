@@ -4,7 +4,7 @@ import React, {Component} from "react";
 import {Query} from "react-apollo";
 import AgileColumn from "../containers/AgileColumnContainer";
 import ProjectMemberIdFilterContainer from "../containers/ProjectMemberIdFilterContainer";
-import IssueDialog from "./ProjectHome";
+import IssueDialog from "./issues/components/IssueDialog";
 
 const styles: any = {
     appBar: {
@@ -15,7 +15,6 @@ const styles: any = {
     },
 };
 class ProjectAgile extends Component<any, any> {
-
     constructor(props: any) {
         super(props);
         this.state = {
@@ -33,12 +32,12 @@ class ProjectAgile extends Component<any, any> {
     }
 
     public render() {
-        const {match: {params: {projectId}}, classes} = this.props;
+        const {match: {params: {projectId}}} = this.props;
         return (
             <div style={{flex: 1, display: "flex"}}>
                 <div style={{width: "100%", height: "100%", display: "flex", flexDirection: "row"}}>
                     <div style={{display: "flex", flex: "0 0 250px", overflowY: "scroll"}}>
-                        <ProjectMemberIdFilterContainer projectId={projectId} onFilter={(item: { id: any; }[]) => this.onFilter(item)}/>
+                        <ProjectMemberIdFilterContainer projectId={projectId} onFilter={(item: Array<{ id: any; }>) => this.onFilter(item)}/>
                     </div>
                     <div style={{flex: 1, minWidth: 0}}>
                         <div style={{width: "100%", height: "100%", overflowX: "scroll"}}>

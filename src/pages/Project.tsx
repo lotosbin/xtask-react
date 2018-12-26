@@ -41,9 +41,9 @@ class Project extends Component<any, any> {
                     <LinkButton size="small" component={Link} to={`/project/${projectId}/agile`}>Agile</LinkButton>
                 </div>
             </div>
-            <PrivateRoute path="/project/:projectId/home" component={ProjectHome}/>
-            <PrivateRoute path="/project/:projectId/gantt" component={ProjectGantt}/>
-            <PrivateRoute path="/project/:projectId/agile" component={ProjectAgile}/>
+            <PrivateRoute path="/project/:projectId/home" match={match} component={ProjectHome}/>
+            <PrivateRoute path="/project/:projectId/gantt" match={match} component={ProjectGantt}/>
+            <PrivateRoute path="/project/:projectId/agile" match={match} component={ProjectAgile}/>
         </div>;
     }
 }

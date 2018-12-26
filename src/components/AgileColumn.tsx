@@ -1,9 +1,12 @@
+/* tslint:disable:variable-name */
+import {ListItemAvatar} from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import {withStyles} from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
+import Gravatar from "react-gravatar";
 
 const styles: any = (theme: any) => ({
     root: {
@@ -44,7 +47,6 @@ class AgileColumn extends React.Component<any> {
     public onDrop(parameters: { e: any, status: any }) {
         const {e, status} = parameters;
         const issue = JSON.parse(e.dataTransfer.getData("issue"));
-        console.log(`onDrop,issue=${JSON.stringify(issue)},status=${JSON.stringify(status)}`);
         if (this.props.onDrop) {
             this.props.onDrop(issue, status);
         }
@@ -52,7 +54,6 @@ class AgileColumn extends React.Component<any> {
 
     public onDragStart(parameters: { e: any, data: any }) {
         const {e, data} = parameters;
-        console.log(`onDragStart,data=${JSON.stringify(data)}`);
         e.dataTransfer.setData("issue", JSON.stringify(data));
     }
 
@@ -65,7 +66,7 @@ class AgileColumn extends React.Component<any> {
 
                 <List style={{flex: 1, overflowY: "scroll", minHeight: "300px"}}>
                     {data.map((issue: any) => {
-                        const {id, subject, assigned_to_name, project: {name: project_name}} = issue;
+                        const {id, subject, assigned_to: {name: assigned_to_name, mail: assigned_to_mail}, project: {name: project_name}} = issue;
                         return (
                             <ListItem
                                 key={id}
@@ -81,6 +82,9 @@ class AgileColumn extends React.Component<any> {
                                     <h1>{project_name}</h1>
                                     <p>{id}:{subject}</p>
                                 </ListItemText>
+                                <ListItemAvatar>
+                                    <Gravatar email={assigned_to_mail}/>
+                                </ListItemAvatar>
                             </ListItem>
                         );
                     })}
