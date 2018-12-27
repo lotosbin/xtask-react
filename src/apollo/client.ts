@@ -9,7 +9,7 @@ const headers = () => {
     };
 };
 const client = new ApolloClient({
-    uri: "http://118.190.32.118:32768/graphql",
+    uri: `${process.env.REACT_APP_API_URL}`,
     // tslint:disable-next-line:object-literal-sort-keys
     headers: headers(),
 });
