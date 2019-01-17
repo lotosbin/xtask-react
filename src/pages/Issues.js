@@ -80,7 +80,7 @@ class Issues extends Component<P, S> {
                         <GanttContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id}/>
                     </div>
                     <div style={{width: "100%", height: "50%", overflowX: "scroll"}}>
-                        <IssueListContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id}/>
+                        <IssueListContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id} onClickItem={this.showIssueDetail}/>
                     </div>
                     <div style={{width: "100%", height: "50%", overflowX: "scroll"}}>
                         <AgileContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id}/>
@@ -104,7 +104,7 @@ class Issues extends Component<P, S> {
         this.setState({value});
     }
 
-    showIssueDetail(issue: any) {
+    showIssueDetail = (issue: any) => {
         if (this.dialog) {
             this.dialog.show(issue);
         }
