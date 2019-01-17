@@ -1,3 +1,4 @@
+// @flow
 import {Tab, Tabs} from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles";
 import {AccessTime, List} from "@material-ui/icons";
@@ -15,6 +16,8 @@ import GanttContainer from "./issues/containers/GanttContainer";
 import MemberIdFilterTabContainer from "./issues/containers/MemberIdFilterTabContainer";
 import ProjectIdFilterTabContainer from "./issues/containers/ProjectIdFilterTabContainer";
 import StatusFilterTabContainer from "./issues/containers/StatusFilterTabContainer";
+import IssueListContainer from "./issues/containers/IssueListContainer";
+import AgileContainer from "./issues/containers/AgileContainer";
 
 const styles: any = {
     card_container: {
@@ -25,29 +28,11 @@ const styles: any = {
         overflowY: "scroll",
     },
 };
-const query: any = gql`query Issues($assigned_to_id:String, $project_id:String) {
-    issues(assigned_to_id:$assigned_to_id,limit:500,project_id:$project_id){
-        id
-        assigned_to_name
-        subject
-        start_date
-        due_date
-        relations{
-            relation_type
-            issue_to_id
-        }
-        status{
-            id
-            name
-        }
-        project{
-            id
-            name
-        }
-    }
-} `;
 
-class Issues extends Component<any, any> {
+type P = {}
+type S = {}
+
+class Issues extends Component<P, S> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -80,36 +65,25 @@ class Issues extends Component<any, any> {
     render() {
         const {classes} = this.props;
         const {value} = this.state;
-        const {id: assigned_to_id} = this.state.filter;
-        const {id: project_id} = this.state.filter_project;
-
+        const {id: assigned_to_id} = this.state.filter || {};
+        const {id: project_id} = this.state.filter_project || {};
+        const {id: status_id} = (this.state.status || {});
         return (
             <div style={{width: "100%", height: "100%", display: "flex", flexDirection: "row"}}>
-                <ProjectIdFilterTabContainer onFilter={(item: any[]) => this.onProjectFilter(item)}/>
-                <MemberIdFilterTabContainer onFilter={(item: any[]) => this.onFilter(item)}/>
-                <StatusFilterTabContainer onFilter={(item: any[]) => this.onStatusFilter(item)}/>
+                <div>
+                    <ProjectIdFilterTabContainer onFilter={(item: any[]) => this.onProjectFilter(item)}/>
+                    <MemberIdFilterTabContainer onFilter={(item: any[]) => this.onFilter(item)}/>
+                    <StatusFilterTabContainer onFilter={(item: any[]) => this.onStatusFilter(item)}/>
+                </div>
                 <div style={{flex: 1, minWidth: 0}}>
                     <div style={{width: "100%", height: "50%", overflowX: "scroll"}}>
-                        <GanttContainer projectId={project_id} memberId={assigned_to_id}/>
+                        <GanttContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id}/>
                     </div>
                     <div style={{width: "100%", height: "50%", overflowX: "scroll"}}>
-                        <Query query={query} variables={{assigned_to_id, project_id}}>
-                            {({loading, error, data}) => {
-                                if (loading) {
-                                    return <p>Loading...</p>;
-                                }
-                                if (error) {
-                                    return <p>Error :(</p>;
-                                }
-                                const statusFilterId = this.state.status.id;
-                                const issues = (data.issues || [])
-                                    .filter((it: { status: { id: any; }; }) => !statusFilterId || statusFilterId === it.status.id)
-                                    .map((it: { subject: any; status: { name: any; }; }) => ({...it, subject: `${it.subject}[${it.status.name}]`}));
-                                return <div className={classes.card_container}>
-                                    <IssueList data={issues} onClickItem={(issue) => this.showIssueDetail(issue)}/>
-                                </div>;
-                            }}
-                        </Query>
+                        <IssueListContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id}/>
+                    </div>
+                    <div style={{width: "100%", height: "50%", overflowX: "scroll"}}>
+                        <AgileContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id}/>
                     </div>
                 </div>
                 <IssueDialog ref={(dialog: IssueDialog) => this.dialog = dialog}/>

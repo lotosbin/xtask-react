@@ -1,4 +1,4 @@
-/* tslint:disable:variable-name */
+// @flow
 import _ from "lodash";
 import moment from "moment";
 import React, {Component} from "react";
@@ -41,7 +41,11 @@ export interface IGanttIssue {
     id: string;
 }
 
-class Gantt extends Component <{ data: any, onSelect: (issue: IGanttIssue) => any }> {
+type P = { data: any, onSelect: (issue: IGanttIssue) => any }
+
+type S = {}
+
+class Gantt extends Component <P, S> {
     chartEvents: [any];
     rows: any[] = [];
 
@@ -66,10 +70,19 @@ class Gantt extends Component <{ data: any, onSelect: (issue: IGanttIssue) => an
                 },
             },
         ];
+        const rows = this.dataToRows();
+        this.rows = rows;
+        this.state = {data: [columns, ...rows]}
     }
 
-    render() {
-        const issues: IGanttIssue[] = this.props.data;
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        const rows = this.dataToRows(nextProps.data);
+        this.rows = rows;
+        this.state = {data: [columns, ...rows]}
+    }
+
+    dataToRows(data = this.props.data) {
+        const issues: IGanttIssue[] = data;
         const exist = issues.filter((it) => !!it.start_date);
         const need = issues.filter((it) => !it.start_date);
         for (let i = 0; i < need.length; i++) {
@@ -85,11 +98,15 @@ class Gantt extends Component <{ data: any, onSelect: (issue: IGanttIssue) => an
             }
         });
         const orderBy = _.orderBy(exist, ["start_date"]);
-        const rows = mapToRow(orderBy);
-        this.rows = rows;
+        return mapToRow(orderBy);
+    }
+
+    render() {
+
         return <Chart
+            ref={"chart"}
             chartType="Gantt"
-            data={[columns, ...rows]}
+            data={this.state.data}
             width="100%"
             height="100%"
             options={{

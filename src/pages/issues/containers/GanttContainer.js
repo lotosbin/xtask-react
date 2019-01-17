@@ -1,7 +1,17 @@
+// @flow weak
 import gql from "graphql-tag";
 import React, {Component} from "react";
 import {Query} from "react-apollo";
 import Gantt, {IGanttIssue} from "../../../components/Gantt";
+
+type P = {
+    projectId?: string,
+    memberId?: string,
+    statusId?: string,
+};
+type S = {
+    issue?: any
+}
 
 const query = gql`query IssuesGantt($id: String,$assigned_to_id:String) {
     projects(id:$id,limit:1000) {
@@ -18,12 +28,17 @@ const query = gql`query IssuesGantt($id: String,$assigned_to_id:String) {
                 relation_type
                 issue_to_id
             }
+            status{
+                id
+            }
         }
     }
 }`;
 
-class GanttContainer extends Component<any, any> {
-    constructor(props: any) {
+class GanttContainer extends Component<P, S> {
+    static defaultProps = {};
+
+    constructor(props: P) {
         super(props);
         this.state = {
             issue: null,
@@ -36,9 +51,9 @@ class GanttContainer extends Component<any, any> {
     }
 
     render() {
-        const {statusId} = this.props;
+        const {statusId, memberId, projectId} = this.props;
         return (
-            <Query query={query} variables={{id: this.props.projectId, assigned_to_id: this.props.memberId}}>
+            <Query query={query} variables={{id: projectId, assigned_to_id: memberId}}>
                 {({loading, error, data}) => {
                     if (loading) {
                         return <p>Loading...</p>;
@@ -46,7 +61,11 @@ class GanttContainer extends Component<any, any> {
                     if (error) {
                         return <p>Error :(</p>;
                     }
-                    const issues = data.projects[0].issues.filter((it: { status: { id: any; }; }) => !statusId || statusId === it.status.id);
+                    let issues = data.projects[0].issues;
+                    if (statusId) {
+                        issues = issues.filter((it) => it.status && statusId === it.status.id);
+                    }
+
                     return <Gantt data={issues} onSelect={(i: IGanttIssue) => this.onSelect(i)}/>;
                 }}
             </Query>

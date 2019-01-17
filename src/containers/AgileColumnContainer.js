@@ -1,7 +1,6 @@
 /* tslint:disable:variable-name no-console */
 import {withStyles} from "@material-ui/core/styles";
 import gql from "graphql-tag";
-import PropTypes from "prop-types";
 import React from "react";
 import {Mutation, Query} from "react-apollo";
 import AgileColumn from "../components/AgileColumn";
@@ -57,7 +56,6 @@ const query = gql`query Agile($assigned_to_id:String,$project_id:String) {
 `;
 
 class AgileColumnContainer extends React.Component<any> {
-    static propTypes: { classes: PropTypes.Validator<object>; data: PropTypes.Validator<object>; status: PropTypes.Validator<object>; project_id: PropTypes.Validator<object>; };
     state = {
         checked: [],
     };
@@ -70,11 +68,14 @@ class AgileColumnContainer extends React.Component<any> {
 
     render() {
         const {project_id, classes, status, assigned_to_id} = this.props;
+        let {status_id} = this.props;
         console.log(`AgileColumn:assigned_to_id=${assigned_to_id}`);
-
+        if (status) {
+            status_id = status.id
+        }
         return (
             <div className={classes.root}>
-                <h1 style={{width: 300}} key={status.id}>{status.name}</h1>
+                <h1 style={{width: 300}} key={status_id}>{status.name}</h1>
                 <div style={{minHeight: 0, overflowY: "scroll"}}>
                     <Query query={query} variables={{project_id, assigned_to_id}}>
                         {({loading, error, data}) => {
@@ -85,7 +86,7 @@ class AgileColumnContainer extends React.Component<any> {
                                 return <p>Error :(</p>;
                             }
                             const issues: any[] = data.issues || [];
-                            const filter: any[] = issues.filter((it: any) => this.filterStatus(status)(it));
+                            const filter: any[] = issues.filter((it: any) => this.filterStatus(status_id)(it));
                             return <Mutation mutation={TASK_UPDATE}>
                                 {(task_update, {data}) => (
                                     <AgileColumn
@@ -110,8 +111,8 @@ class AgileColumnContainer extends React.Component<any> {
         );
     }
 
-    filterStatus(status: any) {
-        return (it: { status: any; }) => (it.status || {}).id === (status || {}).id;
+    filterStatus(status_id?: string) {
+        return status_id ? (it) => (it.status || {}).id === status_id : true;
     }
 }
 
