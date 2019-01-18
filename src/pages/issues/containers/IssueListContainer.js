@@ -5,6 +5,7 @@ import {Query} from "react-apollo";
 import {IGanttIssue} from "../../../components/Gantt";
 import {withStyles} from "@material-ui/core";
 import IssueList from "../../../components/IssueList";
+import {connect} from "react-redux";
 
 const styles: any = {
     card_container: {
@@ -62,8 +63,8 @@ class IssueListContainer extends Component<P, S> {
     }
 
     render() {
-        const {classes} = this.props;
-        const {statusId, memberId, projectId, onClickItem, keyword} = this.props;
+        const {classes, selectIssueId, statusId, memberId, projectId, onClickItem, keyword} = this.props;
+        console.log(`selectIssueId:${selectIssueId}`);
         return (
             <Query query={query} variables={{assigned_to_id: memberId, project_id: projectId}}>
                 {({loading, error, data}) => {
@@ -78,7 +79,7 @@ class IssueListContainer extends Component<P, S> {
                         .filter(it => keyword ? it.subject.indexOf(keyword) > 0 : true)
                         .map((it: { subject: any; status: { name: any; }; }) => ({...it, subject: `${it.subject}[${it.status.name}]`}));
                     return <div className={classes.card_container}>
-                        <IssueList data={issues} onClickItem={onClickItem}/>
+                        <IssueList data={issues} onClickItem={onClickItem} selectIssueId={selectIssueId}/>
                     </div>;
                 }}
             </Query>
@@ -86,4 +87,4 @@ class IssueListContainer extends Component<P, S> {
     }
 }
 
-export default withStyles(styles)(IssueListContainer);
+export default connect(({viewSelect}) => ({selectIssueId: viewSelect}))(withStyles(styles)(IssueListContainer));

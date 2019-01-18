@@ -23,9 +23,11 @@ class IssueDialog extends Component<any, any> {
         this.setState({issue: nextProps.data});
     }
 
-    handleClose() {
+    handleClose = () => {
+        let {onClose} = this.props;
         this.setState({issue: null});
-    }
+        onClose && onClose();
+    };
 
     show(issue: any) {
         this.setState({issue});
@@ -33,10 +35,10 @@ class IssueDialog extends Component<any, any> {
 
     render() {
         return (
-            <Dialog fullScreen open={!!this.state.issue} onClose={this.handleClose.bind(this)} TransitionComponent={Transition}>
+            <Dialog fullScreen open={!!this.state.issue} onClose={this.handleClose} TransitionComponent={Transition}>
                 <AppBar className={styles.app_bar}>
                     <Toolbar>
-                        <IconButton color="inherit" onClick={this.handleClose.bind(this)} aria-label="Close">
+                        <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
                             <CloseIcon/>
                         </IconButton>
                     </Toolbar>

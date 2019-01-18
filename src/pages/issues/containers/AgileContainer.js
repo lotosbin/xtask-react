@@ -5,6 +5,7 @@ import {Query} from "react-apollo";
 import {IGanttIssue} from "../../../components/Gantt";
 import {withStyles} from "@material-ui/core";
 import AgileColumnContainer from "../../../containers/AgileColumnContainer";
+import {connect} from "react-redux";
 
 const styles: any = {
     card_container: {
@@ -48,7 +49,7 @@ class IssueListContainer extends Component<P, S> {
     }
 
     render() {
-        const {statusId: status_id, memberId, projectId, onClickItem} = this.props;
+        const {statusId: status_id, memberId, projectId, onClickItem, selectIssueId} = this.props;
 
         return (
             <Query query={query}
@@ -65,6 +66,7 @@ class IssueListContainer extends Component<P, S> {
                         <div style={{width: "100%", height: "100%"}}>
                             <div style={{width: "100%", height: "100%", overflowY: "scroll", display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                                 {issue_statuses.map((it: { id: any; }) => <AgileColumnContainer
+                                    selectIssueId={selectIssueId}
                                     project_id={projectId}
                                     assigned_to_id={memberId}
                                     status={it}
@@ -80,4 +82,4 @@ class IssueListContainer extends Component<P, S> {
     }
 }
 
-export default withStyles(styles)(IssueListContainer);
+export default connect(({viewSelect}) => ({selectIssueId: viewSelect}))(withStyles(styles)(IssueListContainer));

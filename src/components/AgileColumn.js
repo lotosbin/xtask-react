@@ -4,9 +4,9 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import {withStyles} from "@material-ui/core/styles";
-import PropTypes from "prop-types";
 import React from "react";
 import Gravatar from "react-gravatar";
+import Checkbox from "@material-ui/core/Checkbox";
 
 const styles: any = (theme: any) => ({
     root: {
@@ -58,7 +58,7 @@ class AgileColumn extends React.Component<IAgileColumn> {
     }
 
     render() {
-        const {classes, data = [], status, onClickItem} = this.props;
+        const {classes, data = [], status, onClickItem, selectIssueId} = this.props;
         return (
             <div className={classes.root}
                  onDragOver={(e) => this.onDragOver({e})}
@@ -78,6 +78,11 @@ class AgileColumn extends React.Component<IAgileColumn> {
                                 className={classes.listItem}
                                 onClick={(e) => onClickItem(issue)}
                             >
+                                <Checkbox
+                                    checked={id == selectIssueId}
+                                    tabIndex={-1}
+                                    disableRipple
+                                />
                                 <ListItemText primary={`${subject}`} secondary={`${assigned_to_name}`}>
                                     <h1>{project_name}</h1>
                                     <p>{id}:{subject}</p>

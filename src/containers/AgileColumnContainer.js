@@ -67,7 +67,7 @@ class AgileColumnContainer extends React.Component<any> {
     }
 
     render() {
-        const {project_id, classes, status, assigned_to_id, onClickItem} = this.props;
+        const {project_id, classes, status, assigned_to_id, onClickItem, selectIssueId} = this.props;
         let {status_id} = this.props;
         console.log(`AgileColumn:assigned_to_id=${assigned_to_id}`);
         if (status) {
@@ -90,6 +90,7 @@ class AgileColumnContainer extends React.Component<any> {
                             return <Mutation mutation={TASK_UPDATE}>
                                 {(task_update, {data}) => (
                                     <AgileColumn
+                                        selectIssueId={selectIssueId}
                                         status={status}
                                         data={filter}
                                         onClickItem={onClickItem}

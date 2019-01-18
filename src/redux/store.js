@@ -44,10 +44,20 @@ function recentStatus(state: any, action: { type: string, payload: IStatus }) {
             return state || {list: []};
     }
 }
+
+function viewSelect(state: any, action: { type: string, payload: any }) {
+    switch (action.type) {
+        case "SELECT":
+            return action.payload || null;
+        default:
+            return state || null;
+    }
+}
 const reducers = combineReducers({
     recentMember,
     recentProject,
     recentStatus,
+    viewSelect,
     // apollo: client.reducer(),
 });
 const persistedState = loadState();

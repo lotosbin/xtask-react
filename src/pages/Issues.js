@@ -18,6 +18,8 @@ import ProjectIdFilterTabContainer from "./issues/containers/ProjectIdFilterTabC
 import StatusFilterTabContainer from "./issues/containers/StatusFilterTabContainer";
 import ViewTabContainer from "./issues/containers/ViewTabContainer";
 import KeywordFilter from "../components/KeywordFilter";
+import {connect} from "react-redux";
+import {IMember} from "../components/MemberIdFilter";
 
 const styles: any = {
     card_container: {
@@ -64,7 +66,7 @@ class Issues extends Component<P, S> {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, select} = this.props;
         const {value, keyword} = this.state;
         const {id: assigned_to_id} = this.state.filter || {};
         const {id: project_id} = this.state.filter_project || {};
@@ -87,7 +89,7 @@ class Issues extends Component<P, S> {
                         <ViewTabContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id} keyword={keyword} onClickItem={this.showIssueDetail}/>
                     </div>
                 </div>
-                <IssueDialog ref={(dialog: IssueDialog) => this.dialog = dialog}/>
+                <IssueDialog ref={(dialog: IssueDialog) => this.dialog = dialog} onClose={this.onCloseDialog}/>
             </div>
         );
     }
@@ -110,10 +112,27 @@ class Issues extends Component<P, S> {
         this.setState({keyword})
     };
     showIssueDetail = (issue: any) => {
-        if (this.dialog) {
-            this.dialog.show(issue);
+        const {select} = this.props;
+        let {issue: selectIssue} = this.state;
+        if (selectIssue && issue && selectIssue.id === issue.id) {
+            if (this.dialog) {
+                this.dialog.show(issue);
+            }
+        } else {
+            select(issue.id);
+            this.setState({issue: issue})
         }
+
+    };
+    onCloseDialog = () => {
+        this.setState({issue: null})
     }
 }
 
-export default withStyles(styles)(Issues);
+let mapStateToProps = () => ({});
+let mapDispatchToProps = (dispatch) => ({
+    select(issueId?: string) {
+        dispatch({type: "SELECT", payload: issueId});
+    },
+});
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Issues));
