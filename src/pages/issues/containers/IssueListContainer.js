@@ -63,7 +63,7 @@ class IssueListContainer extends Component<P, S> {
 
     render() {
         const {classes} = this.props;
-        const {statusId, memberId, projectId, onClickItem} = this.props;
+        const {statusId, memberId, projectId, onClickItem, keyword} = this.props;
         return (
             <Query query={query} variables={{assigned_to_id: memberId, project_id: projectId}}>
                 {({loading, error, data}) => {
@@ -75,6 +75,7 @@ class IssueListContainer extends Component<P, S> {
                     }
                     const issues = (data.issues || [])
                         .filter((it: { status: { id: any; }; }) => !statusId || statusId === it.status.id)
+                        .filter(it => keyword ? it.subject.indexOf(keyword) > 0 : true)
                         .map((it: { subject: any; status: { name: any; }; }) => ({...it, subject: `${it.subject}[${it.status.name}]`}));
                     return <div className={classes.card_container}>
                         <IssueList data={issues} onClickItem={onClickItem}/>

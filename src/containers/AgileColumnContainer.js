@@ -67,7 +67,7 @@ class AgileColumnContainer extends React.Component<any> {
     }
 
     render() {
-        const {project_id, classes, status, assigned_to_id} = this.props;
+        const {project_id, classes, status, assigned_to_id, onClickItem} = this.props;
         let {status_id} = this.props;
         console.log(`AgileColumn:assigned_to_id=${assigned_to_id}`);
         if (status) {
@@ -92,7 +92,7 @@ class AgileColumnContainer extends React.Component<any> {
                                     <AgileColumn
                                         status={status}
                                         data={filter}
-                                        onClickItem={this.props.onClickItem}
+                                        onClickItem={onClickItem}
                                         onDrop={(issue: { id: any; }, status: { id: any; }) => {
                                             console.log(`onDrop:${JSON.stringify(issue)},${JSON.stringify(status)}`);
                                             const variables = {

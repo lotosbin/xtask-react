@@ -16,8 +16,8 @@ import GanttContainer from "./issues/containers/GanttContainer";
 import MemberIdFilterTabContainer from "./issues/containers/MemberIdFilterTabContainer";
 import ProjectIdFilterTabContainer from "./issues/containers/ProjectIdFilterTabContainer";
 import StatusFilterTabContainer from "./issues/containers/StatusFilterTabContainer";
-import IssueListContainer from "./issues/containers/IssueListContainer";
-import AgileContainer from "./issues/containers/AgileContainer";
+import ViewTabContainer from "./issues/containers/ViewTabContainer";
+import KeywordFilter from "../components/KeywordFilter";
 
 const styles: any = {
     card_container: {
@@ -40,6 +40,7 @@ class Issues extends Component<P, S> {
             filter_project: {},
             issue: null,
             status: {},
+            keyword: null,
             value: 0,
         };
     }
@@ -64,7 +65,7 @@ class Issues extends Component<P, S> {
 
     render() {
         const {classes} = this.props;
-        const {value} = this.state;
+        const {value, keyword} = this.state;
         const {id: assigned_to_id} = this.state.filter || {};
         const {id: project_id} = this.state.filter_project || {};
         const {id: status_id} = (this.state.status || {});
@@ -76,14 +77,14 @@ class Issues extends Component<P, S> {
                     <StatusFilterTabContainer onFilter={(item: any[]) => this.onStatusFilter(item)}/>
                 </div>
                 <div style={{flex: 1, minWidth: 0}}>
-                    <div style={{width: "100%", height: "50%", overflowX: "scroll"}}>
-                        <GanttContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id}/>
+                    <div style={{width: "100%"}}>
+                        <KeywordFilter onFilter={this.onKeywordFilter}/>
                     </div>
                     <div style={{width: "100%", height: "50%", overflowX: "scroll"}}>
-                        <IssueListContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id} onClickItem={this.showIssueDetail}/>
+                        <ViewTabContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id} keyword={keyword} onClickItem={this.showIssueDetail}/>
                     </div>
                     <div style={{width: "100%", height: "50%", overflowX: "scroll"}}>
-                        <AgileContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id}/>
+                        <ViewTabContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id} keyword={keyword} onClickItem={this.showIssueDetail}/>
                     </div>
                 </div>
                 <IssueDialog ref={(dialog: IssueDialog) => this.dialog = dialog}/>
@@ -104,6 +105,10 @@ class Issues extends Component<P, S> {
         this.setState({value});
     }
 
+    onKeywordFilter = (keyword: string) => {
+        console.log(`onKeywordFilter:${keyword}`);
+        this.setState({keyword})
+    };
     showIssueDetail = (issue: any) => {
         if (this.dialog) {
             this.dialog.show(issue);

@@ -9,6 +9,7 @@ import {loadState, saveState} from "./localStorage";
 function recentProject(state: any, action: { type: string, payload: IProject }) {
     switch (action.type) {
         case "RECENT_PROJECT":
+            if (!action.payload) return state;
             return {
                 ...state,
                 recent_project_list: [action.payload, ..._.filter(state.recent_project_list, (it) => it.id !== action.payload.id)].slice(0, 5),
@@ -21,6 +22,7 @@ function recentProject(state: any, action: { type: string, payload: IProject }) 
 function recentMember(state: any, action: { type: string, payload: IMember }) {
     switch (action.type) {
         case "RECENT_MEMBER":
+            if (!action.payload) return state;
             return {
                 ...state,
                 list: [action.payload, ..._.filter(state.list, (it) => it.id !== action.payload.id)].slice(0, 5),
@@ -33,6 +35,7 @@ function recentMember(state: any, action: { type: string, payload: IMember }) {
 function recentStatus(state: any, action: { type: string, payload: IStatus }) {
     switch (action.type) {
         case "RECENT_STATUS":
+            if (!action.payload) return state;
             return {
                 ...state,
                 list: [action.payload, ..._.filter(state.list, (it) => it.id !== action.payload.id)].slice(0, 5),

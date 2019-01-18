@@ -36,22 +36,8 @@ const query = gql`query IssuesGantt($id: String,$assigned_to_id:String) {
 }`;
 
 class GanttContainer extends Component<P, S> {
-    static defaultProps = {};
-
-    constructor(props: P) {
-        super(props);
-        this.state = {
-            issue: null,
-        };
-
-    }
-
-    onSelect(issue: IGanttIssue) {
-        this.setState({issue});
-    }
-
     render() {
-        const {statusId, memberId, projectId} = this.props;
+        const {statusId, memberId, projectId, onClickItem} = this.props;
         return (
             <Query query={query} variables={{id: projectId, assigned_to_id: memberId}}>
                 {({loading, error, data}) => {
@@ -65,8 +51,7 @@ class GanttContainer extends Component<P, S> {
                     if (statusId) {
                         issues = issues.filter((it) => it.status && statusId === it.status.id);
                     }
-
-                    return <Gantt data={issues} onSelect={(i: IGanttIssue) => this.onSelect(i)}/>;
+                    return <Gantt data={issues} onSelect={(i: IGanttIssue) => onClickItem(i)}/>;
                 }}
             </Query>
         );

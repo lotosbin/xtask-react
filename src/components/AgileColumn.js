@@ -38,12 +38,6 @@ class AgileColumn extends React.Component<IAgileColumn> {
         checked: [],
     };
 
-    onClickItem(parameters: { e: any, item: any }) {
-        const {e, item} = parameters;
-        if (this.props.onClickItem) {
-            this.props.onClickItem(item);
-        }
-    }
 
     onDragOver(parameters: { e: any }) {
         const e = parameters.e;
@@ -64,7 +58,7 @@ class AgileColumn extends React.Component<IAgileColumn> {
     }
 
     render() {
-        const {classes, data = [], status} = this.props;
+        const {classes, data = [], status, onClickItem} = this.props;
         return (
             <div className={classes.root}
                  onDragOver={(e) => this.onDragOver({e})}
@@ -82,7 +76,7 @@ class AgileColumn extends React.Component<IAgileColumn> {
                                 draggable
                                 onDragStart={(e) => this.onDragStart({e, data: issue})}
                                 className={classes.listItem}
-                                onClick={(e) => this.onClickItem({e, item: issue})}
+                                onClick={(e) => onClickItem(issue)}
                             >
                                 <ListItemText primary={`${subject}`} secondary={`${assigned_to_name}`}>
                                     <h1>{project_name}</h1>

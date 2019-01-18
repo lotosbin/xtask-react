@@ -48,7 +48,7 @@ class IssueListContainer extends Component<P, S> {
     }
 
     render() {
-        const {statusId: status_id, memberId, projectId} = this.props;
+        const {statusId: status_id, memberId, projectId, onClickItem} = this.props;
 
         return (
             <Query query={query}
@@ -69,7 +69,7 @@ class IssueListContainer extends Component<P, S> {
                                     assigned_to_id={memberId}
                                     status={it}
                                     key={it.id} data={[]}
-                                    onClickItem={(item: any) => this.setState({issue: item})}
+                                    onClickItem={(item: any) => onClickItem(item)}
                                 />)}
                             </div>
                         </div>
