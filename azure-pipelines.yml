@@ -13,5 +13,9 @@ variables:
   imageName: 'your-container-image-name:$(build.buildId)'
 
 steps:
+- task: NodeTool@0 
+  inputs:
+    versionSpec: '9.x' # replace this value with the version that you need for your project
+- script: yarn install && yarn build
 - script: docker build -f Dockerfile -t $(imageName) .
   displayName: 'docker build'
