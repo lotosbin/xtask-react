@@ -44,6 +44,7 @@ class Issues extends Component<P, S> {
             status: {},
             keyword: null,
             value: 0,
+            hidden1: false,
         };
     }
 
@@ -65,6 +66,9 @@ class Issues extends Component<P, S> {
         this.forceUpdate();
     }
 
+    onClose1 = (hidden) => {
+        this.setState({hidden1: hidden})
+    };
     render() {
         const {classes, select} = this.props;
         const {value, keyword} = this.state;
@@ -79,11 +83,11 @@ class Issues extends Component<P, S> {
                     <StatusFilterTabContainer onFilter={(item: any[]) => this.onStatusFilter(item)}/>
                 </div>
                 <div style={{flex: 1, minWidth: 0}}>
-                    <div style={{width: "100%"}}>
+                    <div style={{width: "100%", display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <KeywordFilter onFilter={this.onKeywordFilter}/>
                     </div>
-                    <div style={{width: "100%", height: "50%", overflowX: "scroll"}}>
-                        <ViewTabContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id} keyword={keyword} onClickItem={this.showIssueDetail}/>
+                    <div style={{width: "100%", height: this.state.hidden1 ? "auto" : "50%", overflowX: "scroll"}}>
+                        <ViewTabContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id} keyword={keyword} onClickItem={this.showIssueDetail} onClose={this.onClose1}/>
                     </div>
                     <div style={{width: "100%", height: "50%", overflowX: "scroll"}}>
                         <ViewTabContainer projectId={project_id} memberId={assigned_to_id} statusId={status_id} keyword={keyword} onClickItem={this.showIssueDetail}/>
